@@ -1,0 +1,23 @@
+<head>
+  <script src="ai.js"></script>
+  <script src="options.js"></script>
+</head>
+<body>
+  <div id="spot" style="height: 100vh; width: 100vw; overflow: hidden;">
+    <!-- Container is now set to take the full viewport width and height -->
+  </div>
+  <script>
+    const host = localStorage.getItem("host"); // Ensure 'const' or 'let' is used for variable declarations
+
+    // Get URL parameters
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const url = urlParams.get('url');
+
+    // Construct iframe HTML
+    const html = '<iframe style="height: 100%; width: 100%; border: none; overflow: hidden;" id="frame" src="' + host + "/claunch.html?url=" + url + '"></iframe>';
+
+    // Set innerHTML of the div
+    document.getElementById("spot").innerHTML = html;
+  </script>
+</body>

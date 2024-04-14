@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Settings</title>
+        <script src="theme.js"></script>
+        <link rel="stylesheet" href="stars.css">
+    </head>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 20px;
+        }
+
+        center {
+            bottom: 30%;
+            position: fixed;
+            width: 100%;
+    
+        }
+        button {
+            background-color: transparent;
+            border: solid;
+            color: white;
+            top: 5%;
+            font-size: large;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+    <body>
+        <div class="main"></div> <!-- Stars effect -->
+
+        <center>
+            <div>
+               <div>Settings</div>
+               <hr color="white" width="50%">
+               <button id="enable_resolve">Toggle Glitch's Resolver</button>
+               <hr color="white" width="50%">
+               <button id="theme" style="display: none;">Cycle through themes</button>
+               <hr color="white" width="50%" id="theme_div" style="display: none;">
+               <button id="ai" style="display: none;">Toggle Anti-Url Steal/Anti Teacher A.I</button>
+               <hr color="white" width="50%" id="ai_div" style="display: none;">
+               <p>Debug info:<br> <span id="debug"></span></p>
+               <h3><a href="main.html"> Return To Main Page</a></h3>
+            </div>
+        </center>
+    </body>
+    <script>
+        const debug = document.getElementById("debug");
+        debug.innerHTML =+ "Host:" + location.host + "<br>" + "Protocol:" + location.protocol + "Version: " + 4.5 + "<br>" + "Connecting from: " + navigator.connection.effectiveType + " internet" + "<br> Platform: " + navigator.platform;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("themes") == "true") {
+                document.getElementById("theme").style.display = "block";
+                document.getElementById("theme_div").style.display = "block";
+            }
+            if (localStorage.getItem("ai_teacher_detection") == "true") {
+                document.getElementById("ai").style.display = "block";
+                document.getElementById("ai_div").style.display = "block";
+            }
+        })
+        const enable_resolve = document.getElementById("enable_resolve");
+
+        enable_resolve.addEventListener("click", function() {
+            if (localStorage.getItem("enable_resolve") == "false" || localStorage.getItem("enable_resolve") == null) {
+                localStorage.setItem("enable_resolve", "true");
+            }
+            else {
+                localStorage.setItem("enable_resolve", "false");
+            }
+
+        });
+
+        // Define the themes
+const themes = [
+    { id: "dark", backgroundColor: "black", color: "white", class: "stars" },
+    { id: "ocean", backgroundColor: "#005493", color: "white", class: "" },
+    { id: "light", backgroundColor: "white", color: "black", class: "" },
+    { id: "forest", backgroundColor: "#013220", color: "white", class: "forest" },
+    { id: "sunset", backgroundColor: "orange", color: "white", class: "" },
+];
+
+// Initial theme index
+let currentThemeIndex = 0;
+
+document.getElementById("theme").addEventListener("click", function() {
+    if (localStorage.getItem("themes") == "false" || localStorage.getItem("themes") == null) {
+        return // Disabled   
+    }
+    // Update the current theme index
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+
+    // Get the new theme
+    const theme = themes[currentThemeIndex];
+
+    // Update local storage
+    localStorage.setItem("theme", theme.id);
+
+    // Apply the new theme styles
+    document.body.style.backgroundColor = theme.backgroundColor;
+    document.body.style.color = theme.color;
+
+    // Manage additional classes
+    const mainDiv = document.getElementsByClassName("main")[0];
+    if (mainDiv) {
+        mainDiv.className = "main " + theme.class; // Ensure that 'main' class is always there along with the theme-specific class
+    }
+});
+
+// Initial theme setup
+document.addEventListener("DOMContentLoaded", function() {
+    const savedThemeId = localStorage.getItem("theme");
+    const savedTheme = themes.find(t => t.id === savedThemeId) || themes[0];
+    document.body.style.backgroundColor = savedTheme.backgroundColor;
+    document.body.style.color = savedTheme.color;
+    const mainDiv = document.getElementsByClassName("main")[0];
+    if (mainDiv) {
+        mainDiv.className = "main " + savedTheme.class;
+    }
+});
+
+
+    </script>
+</html>
+
