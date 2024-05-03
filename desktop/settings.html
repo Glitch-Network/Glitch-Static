@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Settings</title>
+        <style>
+            body {
+                background-color: black;
+                color: white;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            button {
+                background-color: white;
+                color: black;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <h1>Settings</h1>
+            <hr>
+
+            <h2>Themes</h2>
+            <hr>
+            <button id="light">Light</button>
+            <button id="dark">Dark</button>
+            <button id="red">Red</button>
+            <button id="purple">Purple</button>
+            <button id="blue">Blue</button>
+            <br>
+            <hr>
+            <h2>Custom</h2>
+            <hr>
+            <input type="text" id="custom-image" placeholder="Enter image URL">
+            <button id="custom">Custom</button>
+        </center>
+
+        <script>
+            document.getElementById("light").addEventListener("click", () => {
+                localStorage.setItem("theme", "light");
+            })
+            document.getElementById("dark").addEventListener("click", () => {
+                localStorage.setItem("theme", "dark");
+            })
+            document.getElementById("red").addEventListener("click", () => {
+                localStorage.setItem("theme", "red");
+            })
+            document.getElementById("purple").addEventListener("click", () => {
+                localStorage.setItem("theme", "purple");
+            })
+            document.getElementById("blue").addEventListener("click", () => {
+                localStorage.setItem("theme", "blue");
+            })
+            document.getElementById("custom").addEventListener("click", () => {
+                localStorage.setItem("theme", "custom");
+                localStorage.setItem("image", document.getElementById("custom-image").value);
+            })
+        </script>
+    </body>
+</html>

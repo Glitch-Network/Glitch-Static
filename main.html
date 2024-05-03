@@ -1,4 +1,57 @@
-<a href="./index.html" id="click"></a>
 <script>
-    document.getElementById("click").click();
-</script>
+
+if (config["premium-key"] =="xy12gsbl"||config["premium-key"] =="sdfhg3w3"||config["premium-key"] =="sdjh32s" || config["premium-key"] == "13dsadg32r") {
+localStorage.setItem("theme", "dark");
+localStorage.setItem("premium", "true");
+// load config 
+
+if (config["auto-host"] == "True") {
+    document.getElementById("auto-host").checked = true;
+}
+else {
+    document.getElementById("auto-host").checked = false;
+}
+
+if (config["ai_teacher_detection"] == "True") {
+    document.getElementById("ai_teacher_detection").checked = true;
+}
+else {
+    document.getElementById("ai_teacher_detection").checked = false;
+}
+
+if (config["themes"] == "True") {
+    document.getElementById("themes").checked = true;
+}
+else {
+    document.getElementById("themes").checked = false;
+}
+
+if (config["resolver_default"] == "True") {
+    document.getElementById("resolver_default").checked = true;
+}
+else {
+    document.getElementById("resolver_default").checked = false;
+}
+
+if (config["change_discord_inv_url"] == "True") {
+    document.getElementById("change_discord_inv_url").checked = true;
+    document.getElementById("new_discord_inv_url").value = config["new_discord_inv_url"];
+}
+else {
+    document.getElementById("change_discord_inv_url").checked = false;
+}
+
+} else{localStorage.setItem("premium", "false");}
+
+
+
+
+
+  </script>
+  <br>
+  <a id="redirect" href="./index.html">Go back to Glitch</a>
+  <script>
+    document.getElementById("redirect").click()
+  </script>
+</body>
+</html>

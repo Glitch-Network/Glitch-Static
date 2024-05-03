@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- public\menu.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trinity OS</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <style>
+        /* General Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to right, #2c3e50, #4ca1af); /* Smooth gradient background */
+    color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+    <div id="menu">
+        <center>
+            <h2> Toggle Sound </h2>
+            <button id="sound">TOGGLE</button>
+        </center>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById("sound").addEventListener("click", () => {
+                if (localStorage.getItem("sound") == "true") {
+                    localStorage.setItem("sound", "false");
+                }
+                else {
+                    localStorage.setItem("sound", "true");
+                }
+            })
+        })
+    </script>
+</body>
+</html>

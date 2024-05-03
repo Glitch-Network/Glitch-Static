@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Axiom</title>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <style>
+
+            body {
+                overflow: hidden;
+                background-color: black;
+                color: white;
+            }
+
+            #tabs {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                border-bottom: solid 3px white;
+                align-items: center;
+            }
+            .tab {
+                flex: 0 1 auto;
+                font-family: Arial, Helvetica, sans-serif;
+                border: 3px solid white;
+                border-radius: 5px;
+                padding: 10px;
+                margin: 10px;
+                min-width: 100px;
+                white-space: nowrap;
+            }
+            .tab p {
+                margin: 0;
+                display: inline;
+            }
+            .tab p.close {
+                float: right;
+                color: red;
+                font-weight: bold;
+                cursor: pointer;
+                margin-left: 10px;
+            }
+            #create_tab, .create_tab {
+                font-family: Arial, Helvetica, sans-serif;
+                border: 3px solid white;
+                border-radius: 5px;
+                padding: 10px;
+                margin: 10px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="tabs">
+            <div class="create_tab" onclick="window.location.href='./main.html'">Return to Glitch</div>
+            <div id="create_tab" onclick="createTab('Home', './main.html')">+</div>
+        </div>
+
+        <div id="frames">
+            
+        </div>
+
+        <script>
+            function createTab(name, url) {
+                var tab = document.createElement("div");
+                tab.classList.add("tab");
+                tab.id = Math.random().toString(36).substr(2, 9); // Unique ID for the tab
+                tab.innerHTML = `
+                    <p>${name}</p>
+                    <p class="close" onclick="removeTab('${tab.id}')">X</p>
+                `;
+                tab.draggable = true;
+        
+                var frame = document.createElement("iframe");
+                frame.src = url;
+                frame.id = tab.id + "-frame";
+                frame.style.display = "none";
+                frame.style.width = "100%";
+                frame.style.height = "100%";
+                frame.style.border = "none";
+                frame.style.overflow = "hidden";
+                frame.style.position = "absolute";
+        
+                document.getElementById("frames").appendChild(frame);
+        
+                tab.onclick = function() {
+                    // Hide all iframes
+                    var iframes = document.getElementsByTagName("iframe");
+                    for (var i = 0; i < iframes.length; i++) {
+                        iframes[i].style.display = "none";
+                    }
+                    // Display the clicked tab's iframe
+                    document.getElementById(tab.id + "-frame").style.display = "block";
+                };
+        
+                tab.ondragstart = function(event) {
+                    event.dataTransfer.setData("text", tab.id);
+                };
+        
+                tab.ondragover = function(event) {
+                    event.preventDefault(); // Necessary to allow the drop
+                };
+        
+                tab.ondrop = function(event) {
+                    event.preventDefault();
+                    var sourceId = event.dataTransfer.getData("text");
+                    var targetId = tab.id;
+                    if (sourceId !== targetId) {
+                        var sourceTab = document.getElementById(sourceId);
+                        var targetTab = document.getElementById(targetId);
+                        var parent = tab.parentNode;
+                        parent.insertBefore(sourceTab, targetTab.nextSibling);
+                    }
+                };
+        
+                document.getElementById("tabs").appendChild(tab);
+                tab.click(); // Click the newly created tab
+        
+                // Update tab title on iframe load
+                frame.onload = function() {
+                    var frameTitle = frame.contentDocument.title;
+                    tab.innerHTML = `
+                        <p>${frameTitle}</p>
+                        <p class="close" onclick="removeTab('${tab.id}')">X</p>
+                    `;
+                    last_title = frameTitle
+                    setInterval(function() {
+                        frameTitle = frame.contentDocument.title;
+                        if (frameTitle != last_title) {
+                            tab.innerHTML = `
+                                <p>${frameTitle}</p>
+                                <p class="close" onclick="removeTab('${tab.id}')">X</p>
+                            `;
+                            last_title = frameTitle
+                        }
+                    }, 500)
+                };
+            }
+        
+            function removeTab(id) {
+                var tab = document.getElementById(id);
+                var frame = document.getElementById(id + "-frame");
+                if (tab) {
+                    tab.parentNode.removeChild(tab); // Remove the tab
+                }
+                if (frame) {
+                    frame.parentNode.removeChild(frame); // Remove the associated iframe
+                }
+            }
+        
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById("create_tab").click();
+            })
+        </script>
+        
+        
+
+    </body>
+</html>

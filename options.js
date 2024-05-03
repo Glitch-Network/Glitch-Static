@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
 
+
     function createButton(text, iconSrc, onClickHandler) {
         const button = document.createElement("button");
         button.innerHTML = `<img src='${iconSrc}' style='height: 20px; vertical-align: middle; margin-right: 5px;'/>${text}`;
@@ -12,11 +13,15 @@ document.addEventListener("DOMContentLoaded", function() {
         button.style.color = "white";
         button.style.padding = "10px";
         button.style.border = "none";
-        button.style.opacity = "0.5";;
+        button.style.opacity = "0.5";
+        /* Make it the opisite color from its background */
+        button.style.filter = "invert(1)";
         button.style.borderRadius = "5px";
         button.style.cursor = "pointer";
         button.onclick = onClickHandler;
-        document.body.appendChild(button);
+        // append to #root
+        document.getElementById("root").style.backgroundColor = "black";
+        document.getElementById("root").appendChild(button);
         buttonCount++;
         return button;
     }

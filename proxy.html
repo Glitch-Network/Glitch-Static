@@ -3,6 +3,9 @@
     <head>
         <meta charset="utf-8" />
         <title>Glitch</title>
+        <script src="scripts/cursor.js"></script>
+        <link rel="stylesheet" href="gbl.css"/>
+        <link rel="icon" type="image/png" href="assets/favicon.png" />
         <link rel="stylesheet" href="stars.css" />
         <style>
             body {
@@ -68,11 +71,32 @@
         <div class="main"></div> <!-- Stars effect -->
         <div class="content">
             <input class="input" placeholder="https://google.com" id="input">
-            <button class="button" onclick="window.location.href = './'">Go back to home</button>
+            <button class="button" onclick="window.location.href = './main.html'">Go back to home</button>
             
         </div>
 
         <script>
+
+            document.addEventListener("DOMContentLoaded", function() {
+                search_engine_prefrence = localStorage.getItem("search_engine");
+                        if (search_engine_prefrence == null) {
+                            search_engine = "https://www.google.com/search?q=";
+                        }
+                        if (search_engine_prefrence == "Google") {
+                            search_engine = "https://www.google.com/search?q=";
+                        }
+                        if (search_engine_prefrence == "DuckDuckGo") {
+                            search_engine = "https://duckduckgo.com/?q=";
+                        }
+                        if (search_engine_prefrence == "Bing") {
+                            search_engine = "https://www.bing.com/search?q=";
+                        }
+                        if (search_engine_prefrence == "Yahoo") {
+                            search_engine = "https://search.yahoo.com/search?p=";
+                        }
+
+                document.getElementById("input").placeholder = search_engine;
+            })
             document.getElementById("input").addEventListener("keyup", function(event) {
                 if (event.keyCode === 13) { // Enter key
                     var url = document.getElementById("input").value;
@@ -87,7 +111,23 @@
                     }
 
                     if (website==0) {
-                        url = "google.com/search?q=" + url;
+                        search_engine_prefrence = localStorage.getItem("search_engine");
+                        if (search_engine_prefrence == null) {
+                            search_engine = "https://www.google.com/search?q=";
+                        }
+                        if (search_engine_prefrence == "Google") {
+                            search_engine = "https://www.google.com/search?q=";
+                        }
+                        if (search_engine_prefrence == "DuckDuckGo") {
+                            search_engine = "https://duckduckgo.com/?q=";
+                        }
+                        if (search_engine_prefrence == "Bing") {
+                            search_engine = "https://www.bing.com/search?q=";
+                        }
+                        if (search_engine_prefrence == "Yahoo") {
+                            search_engine = "https://search.yahoo.com/search?p=";
+                        }
+                        url = search_engine + url;
                     }
                     
                     if (!url.startsWith("https://") && !url.startsWith("http://")) {

@@ -1,3 +1,4 @@
+try{
 if (localStorage.getItem("ai_teacher_detection") == "true" && localStorage.getItem("premium") == "true") {
 document.body.onload = main;
 
@@ -69,4 +70,8 @@ script.src = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs";
 script.onload = () => console.log("TensorFlow.js loaded");
 document.head.appendChild(script);
 
+}
+
+} catch (error) {
+    console.warn("A.I Teacher detection isn't working.")
 }

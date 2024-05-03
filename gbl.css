@@ -1,0 +1,13 @@
+body {
+    animation: fade_in 0.5s ease-in-out;
+    background-color: black;
+}
+
+@keyframes fade_in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

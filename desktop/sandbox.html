@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <title>Glitch</title>
+
+    <meta name="googlebot" content="index, follow, snippet" />
+    <link rel="shortcut icon" content="favicon.ico" />
+    <link rel="stylesheet" href="index.css" />
+    <script src="baremux/bare.cjs" defer></script>
+    <script src="epoxy/index.js" defer></script>
+    <script src="uv/uv.bundle.js" defer></script>
+    <script src="uv/uv.config.js" defer></script>
+    <script src="register-sw.js" defer></script>
+    <script src="search.js" defer></script>
+    <script src="index.js" defer></script>
+    <link rel="stylesheet" href="gbl.css"/>
+    <style>
+      body {
+        overflow: hidden
+
+      }
+    </style>
+  </head>
+
+  <body>
+    
+
+    <form id="uv-form" class="flex-center">
+      <input
+        id="uv-search-engine"
+        value="https://www.google.com/search?q=%s"
+        type="hidden"
+      />
+      <input style="display: none;" id="uv-address" type="text" placeholder="Search the web freely" />
+    </form>
+    
+    <iframe style="display: none; height: 100vh; width: 100vw; border: none;" id="uv-frame"></iframe>
+  </body>
+    <script>
+  // Function to parse URL parameters
+  function getURLParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  }
+
+  // Automatically load the URL parameter into the input field
+  document.addEventListener('DOMContentLoaded', function() {
+   // check url parameter
+   var url = getURLParameter('refresh');
+   if (url) {
+     // do nothing
+   }
+   else {
+     window.location.href = window.location.href + '&refresh=1';
+   }
+  });
+
+  
+  </script>
+</html>

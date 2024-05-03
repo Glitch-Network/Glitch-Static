@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trinity OS</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
+    <style>
+        /* General Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to right, #2c3e50, #4ca1af); /* Smooth gradient background */
+    color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.resizer {
+    width: 10px;
+    height: 10px;
+    background: transparent;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: nwse-resize;
+    /* add stripes through it */
+}
+
+
+span, code{
+			font-family: monospace;
+
+			white-space: pre-wrap;
+		}
+
+
+
+.nano-wrapper {
+  background-color: #073642; /* Dark teal background */
+  padding: 10px;
+  border: 1px solid #586e75; /* Border color inspired by the original Nano theme */
+  width:  80%;
+}
+
+.nano-header, .nano-footer {
+  padding: 5px;
+  background-color: #00474f; /* Teal header and footer background */
+  border-bottom: 1px solid #586e75; /* Border color inspired by the original Nano theme */
+  text-align: center;
+}
+
+.nano-footer {
+  border-top: 1px solid #586e75; /* Border color inspired by the original Nano theme */
+}
+
+.nano-controls {
+  margin: 0 10px;
+  color: #93a1a1; /* Control text color inspired by the original Nano theme */
+}
+
+#editor {
+  font-family: monospace;
+  padding: 10px;
+  background-color: black; /* Dark teal editor background */
+  color: #839496; /* Text color inspired by the original Nano theme */
+  border: none;
+  resize: none;
+  outline: none;
+  overflow: auto;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+.draggable-window {
+	  width: 300px;
+	  height: 200px;
+	  background-color: #fff;
+	  border: 1px solid #ccc;
+	  position: absolute;
+	}
+	.close-button {
+	  cursor: pointer;
+	  position: absolute;
+	  top: 5px;
+	  color: black;
+	  right: 5px; 
+	}
+
+    iframe {
+        width: 50%;
+    height: 55%;
+    position: absolute; 
+    }
+
+#keyboard {
+	  margin: 0;
+	  padding: 0;
+	  height: 100vh;
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: flex-end;
+	}
+
+	.keyboard {
+
+	  padding: 10px;
+	  width: 100%;
+	  height: 50px;
+	  position: fixed;
+	  bottom: 40px;
+	  box-sizing: border-box;
+	}
+
+	.key {
+	  display: inline;
+	  width: 20px;
+	  height: 20px;
+	  border: 1px solid #ccc;
+	  cursor: pointer;
+	}
+
+/* Window Styling */
+.window {
+    background-color: rgba(19, 19, 19, 0.9);
+    border-radius: 10px;
+    color: white;
+    /* make it so it isnt treated as if its there */
+    position: relative;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease-in-out; /* Smooth transition for transform effects */
+}
+
+/* Title Bar Improvements */
+.title-bar {
+    cursor: grab;
+    user-select: none;
+    z-index: 10;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 5px 10px; /* Padding for better touch interaction */
+}
+
+.xbox, .maxbox {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    color: white;
+    margin-left: 10px; /* Add space between buttons */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.maxbox {
+    background-color: #2ecc71;
+    right: 65px;
+    position: absolute;
+}
+
+.xbox {
+    background-color: #e74c3c;
+}
+
+.xbox:hover, .maxbox:hover {
+    opacity: 0.8;
+}
+
+/* Taskbar and Start Menu Improvements */
+#taskbar {
+    height: 40px;
+    width: 100%;
+    background-color: rgba(51, 51, 51, 0.95);
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 10px; /* Padding on the sides */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#start-button {
+    background-color: #3498db;
+    border: none;
+    user-select: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    transition: background-color 0.3s;
+}
+
+#start-button:hover {
+    background-color: #2980b9;
+}
+
+#start_menu {
+    background-color: #131313;
+    width: 300px;
+    animation-fill-mode: forwards;
+    height: 50vh;
+    user-select: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    bottom: 50px; /* Adjust to raise above the taskbar */
+    left: -300px;
+}
+
+/* Scroll Menu Improvements */
+#scroll_menu {
+    overflow-y: auto;
+    height: calc(100% - 40px); /* Calculate height dynamically */
+    padding: 20px;
+}
+
+#scroll_menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+#scroll_menu::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 10px;
+}
+
+#time {
+    margin-left: auto;
+    font-size: 16px;
+}
+
+/* Ensure #time and #start-button have sufficient spacing */
+#time, #start-button {
+    margin: 0 10px;
+}
+
+/* open app icon */
+.app-icon {
+    border-radius: 25px;
+    /* keep it 5 px away from the left and right edges */
+    margin-right: 5px;
+    margin-left: 5px;
+}
+/* Initial CSS for the menu */
+#start_menu {
+    position: fixed;
+    left: -300px;
+    animation-fill-mode: forwards; /* Ensures properties set in the animation are maintained after it completes */
+}
+
+/* Keyframes for animations */
+@keyframes slide_in_menu {
+    from { left: -300px; }
+    to { left: 10px; }
+}
+
+@keyframes slide_out_menu {
+    from { left: 0; }
+    to { left: -300px; }
+}
+
+
+
+.slide_in_menu {
+    animation: slide_in_menu 0.2s ease-in;
+    animation-fill-mode: forwards;
+}
+
+.slide_out_menu {
+    animation: slide_out_menu 0.2s ease-in;
+    animation-fill-mode: forwards;
+}
+
+#start_menu_buttons {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.seperator {
+    height: 40%;
+    background-color: #ccc;
+    color: #ccc;
+    margin: 10px 0;
+}
+
+#body {
+    height: 100vh;
+}
+
+
+    </style>
+</head>
+<body>
+    <div id="desktop">
+
+
+        <div id="start_menu" style="color: white;">
+            <center>
+                <br>
+                <h2 style="border: solid; border-top: none; border-bottom: none; width: 50%;"> Trinity OS </h2>
+
+                <hr color="white" width="70%"/>
+
+                <div id="scroll_menu">
+                <div id="start_menu_buttons" onclick="xyz()">
+                   <div>
+                        Browser
+                    </div>
+                </div>
+
+                <div id="start_menu_buttons" onclick="launch('https://discord.com/login')" style="background-color: #4224ec;">
+                    <div>
+                         Discord
+                     </div>
+                 </div>
+
+                 <div id="start_menu_buttons" onclick="launch('https://youtube.com')" style="background-color: #db6f6f;">
+                    <div>
+                         Youtube
+                     </div>
+                 </div>
+
+                 <div id="start_menu_buttons" onclick="launch('https://twitter.com')" style="background-color: #54abdd;">
+                    <div>
+                         Twitter
+                     </div>
+                 </div>
+
+                 <div id="start_menu_buttons" onclick="settings()" style="background-color: #434444;">
+                    <div>
+                         Settings
+                     </div>
+                 </div>
+
+
+
+                 <div id="start_menu_buttons" onclick="window.location.href='../main.html'" style="background-color: #434444;">
+                    <div>
+                         Go back to Glitch
+                     </div>
+                 </div>
+
+
+
+
+                </div>
+
+
+
+            </center>
+        </div>
+        
+
+    </div>
+
+    <div id="taskbar">
+
+
+        <div onclick="open_start()" id="start-button">
+            T
+        </div>
+
+
+        <div id="time">
+
+        </div>
+
+        <div class="seperator">
+.
+        </div>
+
+        <div id="open_apps">
+
+        </div>
+
+        <div style="right: 15%; position: fixed; display: flex;">
+            <div class="seperator">
+                .
+            </div>
+
+
+            <button id="menu_button" onclick="open_menu()" style="font-size: 25px; color: white; margin-left: 10px; background-color: transparent; border: none; cursor: pointer;">
+                ^
+            </button>
+        </div>
+
+        <div id="notify" style=" background-color: #131313; border-radius: 10px; width: 300px; align-items: center; justify-content: center; padding-left: 25px; right: 10px; position: fixed; bottom: 10%;">
+            <div id="notify-title">Hi</div>
+            <hr>
+            <div id="notify-text">Hello</div>
+        </div>
+
+
+    </div>
+
+    <script>
+
+const kernel = {
+    processes: [],
+    processAdd: function(name, task, onetime) {
+        name = (name + "=?=" + task)
+        if (onetime) {
+            eval(task)
+        } else {
+            this.processes.push(name);
+        }
+    },
+    baseLoad: function(html) {
+        document.body.innerHTML = html
+    },
+    errorHandle: function() {
+
+        window.addEventListener('error', function(event) {
+
+            html = `<style>
+    body
+{
+    font: 15px;
+    background-color: #0000FF;  
+}
+pre {
+    width: 100hz;
+}
+</style>
+
+<h2>
+<pre>
+
+    A problem has been detected and Trinity OS has been shut down to prevent damage to your computer.
+
+If this is the first time you've seen this error screen, restart your computer.
+If this screen appears again, follow these steps:
+
+Check to make sure any new hardware or software is properly installed.
+If this is a new installation, ask your harware or software manufacturer for any Trinity OS updates you might need.
+
+If problems continue, disable or remove any newly installed hardware or software. Disable BIOS memory options such as caching or shadowing.
+If you need to use Safe mode to remove or disable components, restart Trinity and press N during startup.
+
+Techincal Infomation:
+
+**** STOP ( KRNL PANIC ): ( ${(event.message || event.error.message)} )
+</pre>
+
+</h2>
+  `
+            docuemnt.body.innerHTML = html
+            console.warn("Kernel panic!:", event.error);
+            kernel.halted = true;
+            for (var item in kernel.processes) {
+                console.log(`Kernel: Killing ${(kernel.processes[item].split("=?|?="))[0]}`);
+            }
+            console.warn("Completed")
+        });
+
+    },
+    processRemove: function(name) {
+        new1 = []
+        for (item in this.processes) {
+            tool = this.processes[item]
+            tool.split("=?=")
+
+            if (tool[0] == name) {
+                continue
+            } else {
+                new1.push(this.processes[item])
+            }
+        }
+        this.processes = new1
+
+    },
+    execute: function() {
+        if (this.halted == true) {
+            return
+        }
+        taskmain = setInterval(() => this.taskRunner(this.processes), 500);
+    },
+    taskRunner: function(task) {
+        if (this.halted == true) {
+            return
+        }
+        for (item in task) {
+
+            task1 = task[item].split("=?=")
+            eval(task1[1])
+        }
+
+    },
+
+    getFile: function(path) {
+        if (this.halted == true) {
+            return
+        }
+        return (localStorage.getItem(path))
+    },
+    makeFile: function(path, content) {
+        if (this.halted == true) {
+            return
+        }
+        new1 = path.split("/")
+        arx = new1.length
+
+        new2 = 0
+
+        newp = ""
+
+        while (new2 < arx) {
+
+            if (new1[new2] == new1[arx - 1]) {
+                new2++
+                continue
+            }
+            newp = (newp + new1[new2] + "/")
+            new2++
+        }
+        if (localStorage.getItem(newp) == null) {
+            old = ""
+        } else {
+            old = localStorage.getItem(newp)
+        }
+
+        localStorage.setItem(newp, (old + "," + path))
+        localStorage.setItem(path, content)
+
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    setInterval(updateTheme, 1000);
+    $("#notify").hide()
+});
+
+function notify(title, message) {
+    document.getElementById("notify-title").innerHTML = title
+    document.getElementById("notify-text").innerHTML = message
+    $("#notify").show()
+    setTimeout(function() {
+        $("#notify").hide()
+    })
+}
+
+function open_menu() {
+    createWindow("Menu", "<iframe src='./menu.html' style='height: 100%; width: 100%; border: none;'></iframe>", "menu");
+}
+
+function updateTheme() {
+
+    if (localStorage.getItem("sound") == "true") {
+
+    } else {
+        try {
+            browser.tabs.update({
+                muted: true
+            });
+        } catch (error) {
+
+        }
+    }
+    if (localStorage.getItem("theme") != null) {
+        var theme = localStorage.getItem("theme");
+
+        if (theme == "light") {
+            document.body.style.background = "linear-gradient(to right, #b6fbff, #ffffff)";
+        } else if (theme == "dark") {
+            document.body.style.background = "linear-gradient(to right, #333333, #1a1a2e)";
+        } else if (theme == "red") {
+            document.body.style.background = "linear-gradient(to right, #000000, red)";
+        } else if (theme == "purple") {
+            document.body.style.background = "linear-gradient(to right, #8e44ad, #c154c1)";
+        } else if (theme == "blue") {
+            document.body.style.background = "linear-gradient(to right, #2c3e50, #4ca1af)";
+        } else if (theme == "custom") {
+            image = localStorage.getItem("image")
+            document.body.style.backgroundImage = "url(" + image + ")";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundRepeat = "no-repeat";
+            document.body.style.backgroundPosition = "center";
+
+        }
+    }
+}
+
+function settings() {
+    createWindow("Settings", "<iframe src='./settings.html' style='height: 100%; width: 100%; border: none;'></iframe>");
+}
+
+function xyz() {
+    createWindow("Browser", "<iframe src='./browser' style='height: 100%; width: 100%; border: none;'></iframe>");
+}
+
+function maximize() {
+    let self = $(this).closest('.window');
+
+    self.width($(window).width() - 40);
+    self.height($(window).height() - 100);
+    self.css({
+        top: '5px',
+        left: '5px'
+    });
+    $(this).hide().siblings('.minimize').show();
+
+    adjustIframe();
+}
+
+function minimize() {
+    let self = $(this).closest('.window');
+
+    self.width(300);
+    self.height(200);
+    $(this).hide().siblings('.maximize').show();
+
+    adjustIframe();
+}
+
+function terminal() {
+    createWindow("Terminal",
+        `
+<div style="height: 100%;" id="body">
+</div>
+
+    `, custom_kill="document.body.removeEventListener('keydown', triggerKeyPress)") // custom_kill to remove the keyboard listener
+
+    password = "none"
+
+    function start(type) {
+        kernel.errorHandle()
+        kernel.processAdd("system", "time=new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });")
+        document.getElementById("body").innerHTML = "<div id='terminal'></div>"
+        document.getElementById("body").style.backgroundColor = "black"
+        document.getElementById("body").style.color = "white"
+
+        function terminalWrite(msg, id) {
+
+            var terminalElement = document.getElementById("terminal");
+
+            var txt = document.createElement("span");
+
+            txt.innerHTML = msg;
+            txt.id = id
+
+            terminalElement.appendChild(txt);
+
+            br = document.createElement("br")
+            terminalElement.append(br)
+        }
+
+        terminalWrite("<div style='color: orange;'> Trinity OS | SRV Kernel v1")
+        terminalWrite("Starting processes...")
+        terminalWrite("[<div style='color: green;  display: inline;'> OK </div>] User input started")
+
+        function triggerKeyPress(key) {
+            var event = new KeyboardEvent('keydown', {
+                key: key,
+                bubbles: true,
+                cancelable: true,
+            });
+            document.dispatchEvent(event);
+        }
+        isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        isMobile = false
+        if (isMobile) {
+            alert("This code is meant for PC but i tried making it a little fucntional on mobile, so heres a weird virtual keyboard")
+
+            const keyboard = document.createElement("div");
+            keyboard.classList.add("keyboard");
+
+            const rows = [
+                "QWERTYUIOP",
+                "ASDFGHJKL",
+                "ZXCVBNM",
+                "Ctrl,.",
+                "Enter"
+            ];
+
+            rows.forEach(row => {
+                const rowDiv = document.createElement("div");
+                row.split("").forEach(key => {
+                    const keyDiv = document.createElement("div");
+                    keyDiv.classList.add("key");
+                    keyDiv.textContent = key;
+                    keyDiv.onclick = function() {
+                        triggerKeyPress(key);
+                    };
+                    rowDiv.appendChild(keyDiv);
+                });
+                keyboard.appendChild(rowDiv);
+            });
+
+            document.getElementById("body").appendChild(keyboard);
+        } else {
+
+        }
+
+        if (localStorage.getItem("root") == null) {
+
+            indexbin = `neofetch,none,hat`
+            neofetch = (`
+           if (query == "neofetch"){
+       terminalWrite(\`
+No
+⠀⠀⠀
+
+       \`)
+   }`)
+
+            terminalWrite("[<div style='color: red;  display: inline;'> FAIL </div>] No directories detected")
+            terminalWrite("[<div style='color: yellow;  display: inline;'> WAIT </div>] Installing...")
+
+            kernel.makeFile("root/system/config.ini", "")
+            terminalWrite("[<div style='color: green;  display: inline;'> OK </div>] Installed")
+        }
+        path = "root/home/user"
+
+        function loop() {
+
+            let outputCounter = 1;
+            args = ""
+            let data = localStorage.getItem("root/etc/config.ini").split("_=_");
+            let user = data[0];
+            let password = data[1];
+
+            hyjack = 0
+            js_hijack = 0
+            lockout = 0
+            sandbox = 1
+            terminalWrite(("<div style='display: inline; color: gree;'>" + user + "</div> " + path + " >"), (`output${outputCounter}`))
+            outputDiv = document.getElementById(`output${outputCounter}`)
+            let keyboard_lin= document.addEventListener('keydown', function(event) {
+
+                if (event.key !== 'Shift' && event.key.length === 1) {
+
+                    if (lockout == 1) {
+                        return
+                    }
+                    outputDiv.textContent += event.key;
+                } else if (event.key === "Backspace") {
+
+                    const promptText = user + " " + path + " >";
+                    const currentText = outputDiv.textContent;
+
+                    if (currentText.length <= promptText.length) {
+
+                        return;
+                    } else {
+
+                        outputDiv.textContent = currentText.slice(0, -1);
+                    }
+                } else if (event.key === 'Enter') {
+
+                    query = outputDiv.textContent;
+
+                    query = query.replace((user + " " + path + " >"), "")
+
+                    if (js_hijack == 1) {
+                        if (query == "exit") {
+                            js_hijack = 0
+                        } else {
+                            if (sandbox == 1) {
+                                const sandboxedEval = (code) => {
+                                    const fn = new Function(`return (${code})`);
+                                    return fn();
+                                }
+
+                                sandboxedEval(query)
+                            } else {
+                                eval(query)
+                            }
+                        }
+                    }
+                    if (hyjack == 1) {
+                        if (query == password) {
+                            old = path
+                            path = "root/"
+                            query = args
+                            terminalWrite("[SUDO] Correct password")
+                            lockout = 1
+                            setTimeout(function() {
+                                path = old
+                                lockout = 0
+                                terminalWrite(("<div style='display: inline; color: ;'>" + user + "</div> " + path + " >"), `output${outputCounter}`);
+                                outputDiv = document.getElementById(`output${outputCounter}`);
+                            }, 25)
+                        } else {
+                            terminalWrite("[SUDO] Invalid password")
+                            path = "root/home"
+                            return
+                        }
+                        hyjack = 0
+                    }
+
+                    outputCounter++;
+
+                    if (query.startsWith("sudo ")) {
+                        terminalWrite("[SUDO] Input password for User1");
+                        hyjack = 1;
+                        args = query.replace("sudo ", "");
+                        terminalWrite(`<div style='display: inline; color: ;'>${user}</div> ${path} >`, `output${outputCounter}`);
+                        outputDiv = document.getElementById(`output${outputCounter}`);
+                        return;
+
+                    } else if (query == "debug") {
+                        f
+                    } else if (query == "sandbox_off") {
+                        if (path != "root") {
+                            terminal("Must have administrator permissions to continue")
+                        } else {
+                            sandbox = 0
+                        }
+                    } else if (query == "javascript") {
+                        js_hijack = 1
+                        terminalWrite("JS ( Until Exit )")
+                    } else if (query == "cloak") {
+
+                        var doc = document;
+
+                        var newTab = window.open('about:blank', '_blank');
+
+                        newTab.document.replaceChild(doc.doctype, doc.documentElement);
+
+                        newTab.addEventListener('DOMContentLoaded', function() {
+                            newTab.init();
+                        });
+                    } else if (query == ("sysbackup")) {
+                        kernel.makeFile("system_restore_point.iso", localStorage)
+                        terminalwrite("System backup point created in local directory")
+                    } else if (query === "systemrestore") {
+                        if (localStorage.getItem(path + "/" + "system_restore_point.iso")) {
+                            const element = document.getElementById("desktop");
+                            element.style.animation = 'winshutdown 1s ease-in';
+                            element.style.left = '-242390px';
+                            $("#taskbar").hide();
+                            $("#start-menu").hide();
+
+                            setTimeout(function() {
+                                document.body.innerHTML = `<center><h1 style="color: white">It is now safe to shut off your computer</h1></center>`;
+                            }, 2000);
+                        }
+                    } else if (query.startsWith("apt install")) {
+                        terminalWrite("[<div style='color: yellow;  display: inline;'> WAIT </div>] Fetching onboard index ( /etc/packages/index.bin )")
+                        query = query.replace("apt install ", "")
+                        data = localStorage.getItem("root/etc/packages/index.bin")
+                        try {
+                            data = data.split(",")
+                        } catch {
+                            terminalWrite("[<div style='color: red;  display: inline;'> FAIL </div>] Index not found or index corrupt ( /etc/packages/index.bin )")
+                            data = []
+                        }
+                        work = 0
+                        for (item in data) {
+
+                            terminalWrite(`[<div style='color: green;  display: inline;'> OK </div>] Found ${data[item]}`)
+                            if (data[item].includes(query)) {
+
+                                newdoc = localStorage.getItem("root/packages/")
+                                if (newdoc != null) {
+                                    if (newdoc.includes(query)) {
+                                        terminalWrite(`[<div style='color: green;  display: inline;'> OK </div>] Requirements already satisfied ( ${data[item]} )`)
+                                        break
+                                    }
+                                }
+
+                                terminalWrite(`[<div style='color: green;  display: inline;'> OK </div>] Found requested item ( ${data[item]} )`)
+                                work = 1
+                                doc = localStorage.getItem("root/etc/packages").split(",")
+
+                                doc = [data[item]]
+                                if (doc.includes(data[item])) {
+                                    terminalWrite(`[<div style='color: yellow;  display: inline;'> WAIT </div>] Copying files... ( ${data[item]} )`)
+                                    doc = localStorage.getItem(`root/etc/packages/${data[item]}.bin}`)
+                                    console.log(`root/etc/packages/${data[item]}.bin`)
+                                    kernel.makeFile(`root/packages/${data[item]}.bin`, localStorage.getItem("root/etc/packages/" + query + ".bin"))
+                                    terminalWrite(`[<div style='color: green;  display: inline;'> OK </div>]  Copied( ${data[item]} )`)
+
+                                } else {
+                                    terminalWrite(`[<div style='color: red;  display: inline;'> FAIL </div>] Questioned objects respective file is missing (CORRUPT?) (${query})`)
+                                }
+                            }
+                        }
+                        if (work == 0) {
+                            terminalWrite(`[<div style='color: red;  display: inline;'> FAIL </div>] Questioned objects respective file is missing (CORRUPT?) (${query})`)
+                        }
+
+                    } else if (query.startsWith("mkdir ")) {
+                        query = query.replace("mkdir ", "")
+
+                        kernel.makeFile((path + "/" + query), "") /
+                            nconsole.log((path + query))
+                        terminalWrite("Directory made")
+                    } else if (query.startsWith("username")) {
+                        if (path === "root/") {
+
+                            const newPassword = query.replace("username", "");
+
+                            terminalWrite("Changed username to " + newPassword);
+
+                            let con = localStorage.getItem("root/etc/config.ini");
+                            let conParts = con.split("_=_");
+                            conParts[0] = newPassword;
+
+                            localStorage.setItem("root/etc/config.ini", conParts.join("_=_"));
+                        } else {
+                            terminalWrite("The command must be run with root privilege");
+                        }
+                    } else if (query.startsWith("passwrd")) {
+                        if (path === "root/") {
+
+                            const newPassword = query.replace("passwrd ", "");
+
+                            terminalWrite("Changed password to " + newPassword);
+
+                            let con = localStorage.getItem("root/etc/config.ini");
+                            let conParts = con.split("_=_");
+                            conParts[1] = newPassword;
+
+                            localStorage.setItem("root/config.ini", conParts.join("_=_"));
+                        } else {
+                            terminalWrite("The command must be run with root privilege");
+                        }
+                    } else if (query.startsWith("cd ")) {
+                        query = query.replace("cd ", "");
+
+                        if (query === "..") {
+
+                            const segments = path.split("/");
+                            segments.pop();
+                            const newPath = segments.join("/");
+
+                            if (newPath.startsWith("root/") && newPath !== "root/") {
+                                path = newPath;
+                            } else {
+                                if (path == "root/") {
+                                    path = newPath
+                                } else {
+                                    terminalWrite("Access denied");
+                                }
+                            }
+                        } else {
+
+                            if (query[query.length - 4] === ".") {
+                                terminalWrite("You cannot change directory into a file");
+                            } else if (query === "root/") {
+                                terminalWrite("Denied");
+                            } else {
+                                const fullPath = query.startsWith("-p ") ? query.replace("-p ", "") : path + "/" + query.replace("-p ", "");
+
+                                if (localStorage.getItem(fullPath) === null) {
+                                    terminalWrite("Invalid path");
+                                } else {
+                                    if (query.startsWith("-p")) {
+                                        path = fullPath;
+                                    } else {
+                                        path = fullPath;
+                                    }
+                                }
+                            }
+                        }
+                    } else if (query == "pwd") {
+                        terminalWrite(path)
+                    } else if (query.startsWith("rm ")) {
+                        const fileName = query.replace('rm ', '');
+                        const filePath = path + "/" + fileName;
+                        localStorage.removeItem(filePath)
+
+                        old = localStorage.getItem(path + "/")
+
+                        old = old.split(",")
+                        for (item in old) {
+
+                            if (old[item] == filePath) {
+                                old[item] = ""
+
+                            }
+                        }
+                        localStorage.setItem((path + "/"), old.map(String).join(","))
+                    } else if (query.startsWith("cat ")) {
+                        query = query.replace("cat ", "")
+                        terminalWrite(localStorage.getItem((path + "/" + query)))
+                    } else if (query.startsWith("edit ")) {
+                        query = query.replace("edit ", "")
+                        new1 = query.split("-?-")
+                        localStorage.setItem((path + "/" + new1[0]), new1[1])
+                        terminalWrite("Wrote without failure")
+                    } else if (query.startsWith("touch ")) {
+                        query = query.replace("touch ", "")
+                        kernel.makeFile((path + "/" + query), "")
+                        terminalWrite((query) + " has been made in " + path)
+                    } else if (query.startsWith("clear")) {
+                        localStorage.clear()
+
+                    } else if (query.startsWith("firefox")) {
+                        query = query.replace("firefox ", "");
+                        terminalWrite(`
+       <div id="draggable-window" class="draggable-window">
+           <span class="close-button" onclick="\$('#draggable-window').hide();">X</span>
+           <iframe style="height: 100%; width: 100%;" src="https://${query}" id="out"></iframe>
+       </div>
+   `);
+
+                    } else if (query.startsWith("nano ")) {
+                        document.getElementById("body").innerHTML = `
+   <center>
+   <div class="nano-wrapper">
+     <div class="nano-header">GNU Nano</div>
+     <textarea id="editor" rows="15" cols="80"></textarea>
+     <div class="nano-footer">
+       <span class="nano-controls">^X Exit</span>
+       <span class="nano-controls">^O Save</span>
+     </div>
+   </div>
+   </center>
+ `;
+
+                        const editor = document.getElementById('editor');
+
+                        editor.addEventListener('keydown', function(event) {
+
+
+                            if (event.ctrlKey && event.key === 'x') {
+                                event.preventDefault();
+
+                                document.getElementById("body").innerHTML = "<div id='terminal'></div>"
+                                document.getElementById("body").style.backgroundColor = "black"
+                                document.getElementById("body").style.color = "white"
+                                terminalWrite(("<div style='display: inline; color: ;'>" + user + "</div> " + path + " >"), `output${outputCounter}`);
+                                outputDiv = document.getElementById(`output${outputCounter}`);
+
+                            }
+                            if (event.ctrlKey && event.key === 'o') {
+                                event.preventDefault();
+                                alert('Saving content');
+
+                                localStorage.setItem(path + "/" + query.replace("nano ", ""), editor.value);
+                                console.log(query.replace("nano ", ""))
+                            }
+                        });
+
+                        editor.value = localStorage.getItem(path + "/" + query.replace("nano ", ""))
+
+                        return
+
+                    } else if (query == "apt upgrade") {
+                        lockout = 1
+                        terminalWrite("[<div style='color: yellow;  display: inline;'> WAIT </div>] Updating system...")
+
+                        fetch('https://totallynotacdn.free.nf/ver.txt')
+                            .then(response => response.text())
+                            .then(data => {
+
+                                localStorage.setItem('root/bin/boot/terminal.bin', data);
+
+                                terminalWrite("[<div style='color: green;  display: inline;'> OK </div>] System updated restart to get newer version")
+                            })
+                            .catch(error => {
+                                terminalWrite("[<div style='color: red;  display: inline;'> FAIL </div>] Failed to update: " + error);
+                            });
+
+                    }
+                    if (query === "ls") {
+                        const items = localStorage.getItem(path + "/");
+
+                        if (!items) {
+                            terminalWrite("No items in directory");
+                        } else {
+                            const itemList = items.split(",");
+                            for (const item of itemList) {
+                                const itemName = item.replace(path + "/", "");
+                                terminalWrite(itemName);
+                            }
+                        }
+                    } else {
+
+                        try {
+                            out = eval(query)
+
+                        } catch (error) {
+
+                        }
+                    }
+
+                    try {
+                        doc = localStorage.getItem("root/packages/")
+                        doc = doc.split(",")
+                        for (item in doc) {
+                            console.log(localStorage.getItem((path + "/" + doc[item] + ".bin")))
+                            eval(localStorage.getItem((path + "/" + doc[item] + ".bin")))
+                        }
+                    } catch {}
+
+                    if (lockout == 1) {
+                        return
+                    }
+                    terminalWrite(("<div style='display: inline; color: ;'>" + user + "</div> " + path + " >"), `output${outputCounter}`);
+                    outputDiv = document.getElementById(`output${outputCounter}`);
+
+                }
+
+            });
+
+        }
+
+        setTimeout(function() {
+            loop()
+        }, 500)
+
+    }
+
+    start()
+
+}
+
+let windowCount = 0;
+let zIndexCounter = 100;
+function createWindow(title, content, url = "none", custom_kill="x=0") {
+    windowCount++;
+    let id = 'window' + windowCount;
+
+    // Creating a new window div with a dynamic z-index
+    let newWindow = $('<div></div>', {
+        class: 'window',
+        id: id,
+        css: {
+            'z-index': zIndexCounter++,
+            'position': 'absolute', // Ensure it's positioned relatively to its first positioned ancestor
+            'width': '300px',       // Default width
+            'height': '200px'       // Default height
+        }
+    }).draggable({
+        containment: "body",
+        handle: '.title-bar'
+    });
+
+    // Title bar with correct id concatenation
+    let titleBar = $('<div></div>', {
+        class: 'title-bar',
+        id: 'title-bar-' + id
+    }).appendTo(newWindow);
+
+    // Adding title to the title bar
+    $('<div>' + title + '</div>').appendTo(titleBar);
+    // Maximize and minimize buttons with actions (assuming `maximize` and `minimize` functions are defined)
+    $('<div class="maxbox maximize">[ ]</div>').click(maximize).appendTo(titleBar);
+    $('<div class="maxbox minimize">[-]</div>').click(minimize).appendTo(titleBar);
+    // Close button
+    $('<div class="xbox close">X</div>').click(function() {
+        newWindow.remove();
+        $('#' + id).remove();
+        eval(custom_kill);
+
+    }).appendTo(titleBar);
+
+    // Adding content to the window
+    $('<div>' + content + '</div>').appendTo(newWindow);
+
+    // Append the new window to the desktop
+    $('#desktop').append(newWindow);
+
+    // Icon for the application in the taskbar or similar container
+    let appIcon = $('<img>', {
+        src: "https://www.google.com/s2/favicons?sz=64&domain=" + url.replace("https://", "").replace("http://", ""),
+        class: "app-icon",
+        id: id,
+        css: {
+            'width': '32px',
+            'height': '32px'
+        },
+        click: function() {
+            $('.window').css('z-index', 100); // Reset z-index for all windows
+            newWindow.css('z-index', zIndexCounter++); // Bring clicked window to front
+        }
+    });
+
+    $('#open_apps').append(appIcon);
+
+    enableResizing(newWindow);
+}
+
+function enableResizing(elem) {
+    let resizer = $('<div></div>', {
+        class: 'resizer',
+    }).appendTo(elem);
+
+    resizer.on('mousedown', function (e) {
+        e.preventDefault();
+        $(window).on('mousemove', mouseMove);
+        $(window).on('mouseup', mouseUp);
+
+        let prevX = e.clientX;
+        let prevY = e.clientY;
+
+        function mouseMove(e) {
+            let width = elem.width();
+            let height = elem.height();
+            let newX = prevX - e.clientX;
+            let newY = prevY - e.clientY;
+            elem.css({
+                'width': width - newX,
+                'height': height - newY
+            });
+            prevX = e.clientX;
+            prevY = e.clientY;
+        }
+
+        function mouseUp() {
+            $(window).off('mousemove', mouseMove);
+            $(window).off('mouseup', mouseUp);
+        }
+    });
+}
+
+function maximize() {
+    let self = $(this).closest('.window');
+    self.css({
+        width: $(window).width() - 40,
+        height: $(window).height() - 100,
+        top: '5px',
+        left: '5px',
+        zIndex: zIndexCounter++
+    });
+    $(this).hide().siblings('.minimize').show();
+}
+
+function open_start() {
+    var element = $("#start_menu");
+
+    if (element.css('left') === '-300px') {
+        element.css({
+            animation: 'slide_in_menu 0.5s ease-in forwards'
+        });
+    } else {
+        element.css({
+            animation: 'slide_out_menu 0.5s ease-in forwards',
+            left: '-300px'
+        });
+    }
+}
+
+function launch(url) {
+
+    let name = url.split('/')[2];
+    name = name.startsWith('www.') ? name.substring(4) : name;
+    name = name.split('.')[0];
+    name = name.charAt(0).toUpperCase() + name.slice(1);
+
+    console.log("Computed Window Title:", name);
+
+    let iframeUrl = "./sandbox.html?url=" + encodeURIComponent(url); 
+
+    let content = "<div style='width: 100%; height: 100%;'><iframe src='" + iframeUrl + "' style='height: 100%; width: 100%; border: none;'></iframe></div>";
+
+    createWindow(name, content, url);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const startMenu = document.getElementById("start_menu");
+    startMenu.style.left = "-300px";
+    startMenu.style.position = "fixed";
+
+    document.getElementById("start_button").addEventListener("click", function() {
+
+        if (startMenu.style.animation.includes("slide_in_menu 0.5s")) {
+            startMenu.style.animation = "slide_out_menu 0.5s";
+        } else {
+            startMenu.style.animation = "slide_in_menu 0.5s";
+        }
+    });
+
+    startMenu.addEventListener("animationend", function() {
+
+        startMenu.style.animation = "";
+    });
+});
+
+function adjustIframe() {
+    $('.window').each(function() {
+        var $win = $(this);
+        var windowHeight = $win.innerHeight();
+        var windowWidth = $win.innerWidth();
+
+        $win.find('iframe').css({
+            'height': windowHeight - 60 + 'px',
+            'width': windowWidth - 50 + 'px'
+        });
+    });
+}
+
+$(window).resize(adjustIframe);
+
+$(document).ready(adjustIframe);
+
+setInterval(function() {
+    hour = new Date().getHours();
+    minute = new Date().getMinutes();
+    if (minute < 10) {
+        minute = '0' + minute;
+    }
+    type = hour >= 12 ? 'PM' : 'AM';
+    x = hour + ':' + minute + ' ' + type;
+    $('#time').text(x);
+}, 1000);
+
+    </script>
+</body>
+</html>

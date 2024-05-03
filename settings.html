@@ -3,8 +3,10 @@
     <head>
         <meta charset="utf-8">
         <title>Settings</title>
-        <script src="theme.js"></script>
+        <script src="scripts/theme.js"></script>
+        <link rel="stylesheet" href="gbl.css"/>
         <link rel="stylesheet" href="stars.css">
+        <link rel="icon" type="image/png" href="assets/favicon.png" />
     </head>
     <style>
         body {
@@ -31,6 +33,16 @@
             text-decoration: none;
             color: white;
         }
+
+        /* search engine dropdown */
+
+        select {
+            background-color: transparent;
+            filter: invert(1);
+            border: none;
+            font-size: 20px;
+            
+        }
     </style>
     <body>
         <div class="main"></div> <!-- Stars effect -->
@@ -39,27 +51,56 @@
             <div>
                <div>Settings</div>
                <hr color="white" width="50%">
-               <button id="enable_resolve">Toggle Glitch's Resolver</button>
+               <button onclick="localStorage.clear();">Reset all settings</button>
+               <button onclick="save()">Save your data ( No relogins on new link )</button>
+               <button onclick="load()">Load your data</button>
+               <hr color="white" width="50%">
+               <h4>Default search engine</h4>
+               <select id="engine">
+                  <option value="Google">Google</option>
+                  <option value="DuckDuckGo">DuckDuckGo</option>
+                  <option value="Bing">Bing</option>
+                  <option value="Yahoo">Yahoo</option>
+               </select> 
+               <hr color="white" width="50%">
+               <button style="display: none;"="enable_resolve" id="enable_resolve">Toggle Glitch's Resolver</button>
                <hr color="white" width="50%">
                <button id="theme" style="display: none;">Cycle through themes</button>
                <hr color="white" width="50%" id="theme_div" style="display: none;">
                <button id="ai" style="display: none;">Toggle Anti-Url Steal/Anti Teacher A.I</button>
                <hr color="white" width="50%" id="ai_div" style="display: none;">
                <p>Debug info:<br> <span id="debug"></span></p>
-               <h3><a href="main.html"> Return To Main Page</a></h3>
+               <h3><a href="./main.html"> Return To Main Page</a></h3>
+               <!-- File loader element -->
+               <input type="file" id="fileinput" style="display: none;">
+
+            </div>
             </div>
         </center>
     </body>
     <script>
-        const debug = document.getElementById("debug");
-        debug.innerHTML =+ "Host:" + location.host + "<br>" + "Protocol:" + location.protocol + "Version: " + 4.5 + "<br>" + "Connecting from: " + navigator.connection.effectiveType + " internet" + "<br> Platform: " + navigator.platform;
 
         document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem("themes") == "true") {
+            if (localStorage.getItem("search_engine") != null) {
+                document.getElementById("engine").value = localStorage.getItem("search_engine");    
+            }
+            setInterval(function() {
+                env = document.getElementById("engine").value
+                localStorage.setItem("search_engine", env);
+            }, 10)
+        })
+        const debug = document.getElementById("debug");
+        debug.innerHTML =+ "Host:" + location.host + "<br>" + "Protocol:" + location.protocol + "Version: " + "v5 Beta" + "<br>" + "Connecting from: " + navigator.connection.effectiveType + " internet" + "<br> Platform: " + navigator.platform;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("resolver_default") == "false") {
+                document.getElementById("enable_resolve").style.display = "none";
+            }
+            if (localStorage.getItem("themes") == "true" || true) {
                 document.getElementById("theme").style.display = "block";
                 document.getElementById("theme_div").style.display = "block";
             }
-            if (localStorage.getItem("ai_teacher_detection") == "true") {
+            if (localStorage.getItem("ai_teacher_detection") == "true" || true) {
                 document.getElementById("ai").style.display = "block";
                 document.getElementById("ai_div").style.display = "block";
             }
@@ -123,6 +164,71 @@ document.addEventListener("DOMContentLoaded", function() {
         mainDiv.className = "main " + savedTheme.class;
     }
 });
+
+
+
+function save() {
+    let data = "";
+
+    for (const [key, value] of Object.entries(localStorage)) {
+        if (key.includes("data")) {
+            data += key + "=" + value + "\n";
+        }
+    }
+
+    var blob = new Blob([btoa(data)], { type: "text/plain;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "data.glitch";
+    document.body.appendChild(a); // Append the anchor to body
+    a.click(); // Simulate click on the anchor
+    document.body.removeChild(a); // Remove the anchor from body
+    URL.revokeObjectURL(url); // Clean up the URL object
+}
+
+function load() {
+    const input = document.getElementById("fileinput");
+    if (input) {
+        input.removeEventListener("change", handleFileSelect); // Safe to call if input exists
+        input.addEventListener("change", handleFileSelect);
+        input.click();
+    } else {
+        console.error("File input element not found!");
+    }
+}
+
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        let contents = e.target.result;
+
+        // Decode Base64
+        contents = atob(contents);
+
+        // Split into lines
+        const lines = contents.split("\n");
+
+        for (const line of lines) {
+            if (line.trim().length > 0) {
+                const [key, value] = line.split("=");
+                localStorage.setItem(key, value);
+            }
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+
+
+
+
+
+
 
 
     </script>
