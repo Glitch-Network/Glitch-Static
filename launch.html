@@ -1,23 +1,230 @@
+<!DOCTYPE html>
+<html>
+
 <head>
-  <script src="ai.js"></script>
-  <script src="options.js"></script>
+    <title>Glitch | Launch</title>
+    <!-- jQuery -->
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@200" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="scripts/js/global.js"></script>
+    <style>
+        body {
+            overflow: hidden;
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #tabs {
+            display: flex;
+            margin-top: 5px;
+            flex-wrap: nowrap;
+            z-index: 2;
+            overflow-x: auto;
+            align-items: center;
+            height: 45px; 
+            background-color: #2c2c2c;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            padding: 0 15px;
+            border-bottom: #2c2c2c 3px solid;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-radius: 4px 4px 0 0;
+            background-color: #333;
+            color: #e0e0e0;
+            cursor: pointer;
+            margin: 0 5px;
+            height: 100%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .tab:hover {
+            background-color: #444;
+            color: #fff;
+        }
+
+        .tab p {
+            margin: 0;
+            padding: 0;
+            white-space: nowrap;
+        }
+
+        .tab p.close {
+            margin-left: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #create_tab,
+        .create_tab {
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-radius: 4px;
+            background-color: #333;
+            color: #e0e0e0;
+            cursor: pointer;
+            margin: 0 5px;
+            height: 100%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        #create_tab:hover,
+        .create_tab:hover {
+            background-color: #444;
+            color: #fff;
+        }
+
+        #frames {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 30px);
+        }
+
+        iframe {
+            display: none;
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+        }
+    </style>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-278K4F012J"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-278K4F012J');
+    </script>
+
 </head>
+
 <body>
-  <div id="spot" style="height: 100vh; width: 100vw; overflow: hidden;">
-    <!-- Container is now set to take the full viewport width and height -->
-  </div>
-  <script>
-    const host = localStorage.getItem("host"); // Ensure 'const' or 'let' is used for variable declarations
+    <div id="tabs">
+        <div class="create_tab" onclick="window.location.href='./main.html'"><span class="material-symbols-outlined">home</span></div>
+        <div id="create_tab" onclick="createTab('New Tab', './start.html')">+</div>
+    </div>
 
-    // Get URL parameters
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const url = urlParams.get('url');
+    <div id="frames">
+    </div>
 
-    // Construct iframe HTML
-    const html = '<iframe style="height: 100%; width: 100%; border: none; overflow: hidden;" id="frame" src="' + host + "/claunch.html?url=" + url + '"></iframe>';
+    <script>
+        let initialized = 0;
 
-    // Set innerHTML of the div
-    document.getElementById("spot").innerHTML = html;
-  </script>
+        function getURLParameter(name) {
+            const regex = new RegExp('[\\?&]' + name.replace(/[\[\]]/g, '\\$&') + '=([^&#]*)');
+            const results = regex.exec(window.location.search);
+            return results ? decodeURIComponent(results[1].replace(/\+/g, ' ')) : '';
+        }
+
+        function createTab(name, url) {
+            var tab = document.createElement("div");
+            tab.classList.add("tab");
+            tab.id = Math.random().toString(36).substr(2, 9); // Unique ID for the tab
+            tab.innerHTML = `
+                <p>${name}</p>
+                <p class="close" onclick="removeTab('${tab.id}')">X</p>
+            `;
+            tab.draggable = true;
+
+            var frame = document.createElement("iframe");
+            frame.src = url;
+            frame.id = tab.id + "-frame";
+            frame.style.display = "none";
+
+            document.getElementById("frames").appendChild(frame);
+
+            tab.onclick = function () {
+                // Hide all iframes
+                var iframes = document.getElementsByTagName("iframe");
+                for (var i = 0; i < iframes.length; i++) {
+                    iframes[i].style.display = "none";
+                }
+                // Display the clicked tab's iframe
+                document.getElementById(tab.id + "-frame").style.display = "block";
+            };
+
+            tab.ondragstart = function (event) {
+                event.dataTransfer.setData("text", tab.id);
+            };
+
+            tab.ondragover = function (event) {
+                event.preventDefault(); // Necessary to allow the drop
+            };
+
+            tab.ondrop = function (event) {
+                event.preventDefault();
+                var sourceId = event.dataTransfer.getData("text");
+                var targetId = tab.id;
+                if (sourceId !== targetId) {
+                    var sourceTab = document.getElementById(sourceId);
+                    var targetTab = document.getElementById(targetId);
+                    var parent = tab.parentNode;
+                    parent.insertBefore(sourceTab, targetTab.nextSibling);
+                }
+            };
+
+            document.getElementById("tabs").appendChild(tab);
+            tab.click(); // Click the newly created tab
+
+            // Update tab title on iframe load
+            frame.onload = function () {
+                var frameTitle = frame.contentDocument.title;
+                tab.innerHTML = `
+                    <p>${frameTitle}</p>
+                    <p class="close" onclick="removeTab('${tab.id}')">X</p>
+                `;
+                var last_title = frameTitle;
+                setInterval(function () {
+                    frameTitle = frame.contentDocument.title;
+                    if (frameTitle != last_title) {
+                        tab.innerHTML = `
+                            <p>${frameTitle}</p>
+                            <p class="close" onclick="removeTab('${tab.id}')">X</p>
+                        `;
+                        last_title = frameTitle;
+                    }
+                }, 500);
+            };
+        }
+
+        function removeTab(id) {
+            var tab = document.getElementById(id);
+            var frame = document.getElementById(id + "-frame");
+            if (tab) {
+                tab.parentNode.removeChild(tab); // Remove the tab
+            }
+            if (frame) {
+                frame.parentNode.removeChild(frame); // Remove the associated iframe
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (initialized === 0) {
+                var url = getURLParameter("url");
+                if (url.includes(".onion") && localStorage.getItem("premium") === "1" && localStorage.getItem("tor") === "1") {
+                    url = url.replace(".onion", "").replace("http://", "");
+                    var new_tor_url = "https://onion.torry.io/main.php?url=" + url;
+                    url = new_tor_url;
+                }
+                if (url) {
+                    createTab("Home", "./launch_page.html?url=" + url);
+                }
+                initialized = 1;
+            }
+        });
+    </script>
+    <script src="scripts/js/global.js"></script>
 </body>
+
+</html>

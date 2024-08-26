@@ -1,0 +1,281 @@
+/* le font */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+/* oh lets also import https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100 */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100&display=swap,FILL,GRA');
+:root {
+  /* Define common colors and dimensions here for easy theming and adjustments */
+  --background-color-main: #212121;
+  --background-color-toolbar: #131313;
+  --text-color: #fff;
+  --toolbar-top: 10px;
+  --toolbar-horizontal-padding: 5px;
+  --toolbar-radius: 15px;
+  --toolbar-height: 60px;
+  --link-margin: 20px;
+  --separator-width: 5px;
+  --separator-height: 30px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Source Sans 3', arial;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(to bottom, #00c6ff, #0072ff); /* Sea-like gradient */
+  background-size: cover;
+  background-attachment: fixed;
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+#toolbar {
+  position: fixed;
+  top: var(--toolbar-top);
+  left: 5%;
+  right: 5%;
+  color: white;
+  height: var(--toolbar-height);
+  padding: var(--toolbar-horizontal-padding);
+  z-index: 15;
+  border-radius: var(--toolbar-radius);
+  background-color: var(--background-color-toolbar);
+  display: flex;
+  align-items: center;
+  animation: move-rainbow 5s infinite;
+  border-style: solid;
+  border-width: 0; /* Ensure borders are not visible by default */
+  border-image-slice: 1;
+}
+
+#nav-links {
+  display: flex;
+  margin-left: auto; /* Ensures nav links are positioned towards the right */
+}
+
+#nav-links h3 {
+  cursor: pointer;
+  margin: 0 var(--link-margin);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+#nav-links h3:hover {
+  transition: transform 0.2s, box-shadow 0.2s; /* Smoother transitions */
+  transform: scale(1.15); /* Subtle scaling effect */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Deeper shadow on hover */
+}
+
+.separator {
+  border-left: 1px solid var(--text-color);
+  height: var(--separator-height);
+  margin: 0 var(--link-margin);
+}
+
+#nav-links h3 {
+  margin: 0 var(--link-margin); /* Updated to remove only left margin */
+}
+
+#glitch-logo {
+  width: 69px;
+  position: absolute;
+  left: var(--toolbar-horizontal-padding);
+}
+
+#toolbar input {
+  background-color: #474747;
+  border-radius: 10px;
+  border: none;
+  color: var(--text-color);
+  padding: 10px; /* Increased padding for better visibility */
+  width: calc(100% - 30px); /* Adjust width to consider padding and margins */
+}
+
+#content {
+  margin-top: calc(var(--toolbar-height) + 20px); /* Adjusted for clarity */
+}
+
+.main_button {
+  padding: 15px;
+  background-color: #1b1b1b;
+  border-style: solid;
+  margin: 15px;
+  width: 155px;
+  color: white;
+  border-color: transparent;
+  border-radius: 15px;
+  transition: background-color 0.3s, transform 0.3s; /* Add transition for smooth effects */
+}
+
+.main_button:hover {
+  background-color: #131314;
+  color: white;
+  transform: translateY(13px); /* Correcting the transform value to include px */
+}
+
+.custom-model-main {
+  text-align: center;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0; /* z-index: 1050; */
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+  opacity: 0;
+  -webkit-transition: opacity 0.15s linear, z-index 0.15;
+  -o-transition: opacity 0.15s linear, z-index 0.15;
+  transition: opacity 0.15s linear, z-index 0.15;
+  z-index: -1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.model-open {
+  z-index: 99999;
+  opacity: 1;
+  overflow: hidden;
+}
+.custom-model-inner {
+  -webkit-transform: translate(0, -25%);
+  -ms-transform: translate(0, -25%);
+  transform: translate(0, -25%);
+  -webkit-transition: -webkit-transform 0.3s ease-out;
+  -o-transition: -o-transform 0.3s ease-out;
+  transition: -webkit-transform 0.3s ease-out;
+  -o-transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+  display: inline-block;
+  vertical-align: middle;
+  width: 600px;
+  margin: 30px auto;
+  max-width: 97%;
+}
+.custom-model-wrap {
+  display: block;
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  background-clip: padding-box;
+  outline: 0;
+  text-align: left;
+  padding: 20px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
+}
+.model-open .custom-model-inner {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+  position: relative;
+  z-index: 999;
+}
+.model-open .bg-overlay {
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 99;
+}
+
+.close-btn {
+  position: absolute;
+  right: 0;
+  top: -30px;
+  cursor: pointer;
+  z-index: 99;
+  font-size: 30px;
+  color: #fff;
+}
+
+@media screen and (min-width:800px){
+  .custom-model-main:before {
+    content: "";
+    display: inline-block;
+    height: auto;
+    vertical-align: middle;
+    margin-right: -0px;
+    height: 100%;
+  }
+}
+@media screen and (max-width:799px){
+  .custom-model-inner{margin-top: 45px;}
+}
+
+ntainer{
+  max-width: 450px;
+  margin: 150px auto;
+}
+
+.container .searchInput{
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+}
+
+.searchInput input{
+  height: 55px;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 0 60px 0 20px;
+  font-size: 18px;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+}
+
+.searchInput.active input{
+  border-radius: 5px 5px 0 0;
+}
+
+.searchInput .resultBox{
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.searchInput.active .resultBox{
+  padding: 10px 8px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.resultBox li{
+  list-style: none;
+  padding: 8px 12px;
+  background-color: white;
+  display: none;
+  width: 70%;
+  color: black;
+  cursor: default;
+  margin-bottom: 10px;
+  border-radius: 3px;
+}
+
+.searchInput.active .resultBox li{
+  display: block;
+  
+}
+.resultBox li:hover{
+  background: #efefef;
+}
+
+.searchInput .icon{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 55px;
+  width: 55px;
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  color: #644bff;
+  cursor: pointer;
+}

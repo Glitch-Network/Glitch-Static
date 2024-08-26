@@ -1,236 +1,283 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Settings</title>
-        <script src="scripts/theme.js"></script>
-        <link rel="stylesheet" href="gbl.css"/>
-        <link rel="stylesheet" href="stars.css">
-        <link rel="icon" type="image/png" href="assets/favicon.png" />
-    </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="scripts/js/settings.js"></script>
+    <title>Glitch | Settings</title>
+    <link rel="stylesheet" href="scripts/css/global.css">
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-278K4F012J"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" integrity="sha512-mAczvfhz+f1JSKzSgEb50NdMFgb+Q4mEPU6U2C8g3b7W+VXoxn5SUKmR1+wdfpkoVchD5tzgmlQtAAgriP6IWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-278K4F012J');
+    </script>
     <style>
         body {
-            background-color: black;
-            color: white;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 20px;
+            color: #fff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: auto;
+            background-color: #222;
         }
-
-        center {
-            bottom: 30%;
-            position: fixed;
-            width: 100%;
-    
+        .container {
+            text-align: left;
+            width: 90%;
+            margin-top: 150px;
+            max-width: 800px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        button {
-            background-color: transparent;
-            border: solid;
-            color: white;
-            top: 5%;
-            font-size: large;
+        h1, button, select, input[type="text"] {
+            margin-top: 10px;
         }
-        a {
-            text-decoration: none;
-            color: white;
-        }
-
-        /* search engine dropdown */
-
-        select {
-            background-color: transparent;
-            filter: invert(1);
+        button, select {
+            padding: 10px 20px;
+            font-size: 16px;
             border: none;
-            font-size: 20px;
-            
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+        button:hover, button:focus {
+            background-color: #555;
+        }
+        select {
+            width: 100%;
+            background-color: #444;
+            color: white;
+        }
+        input {
+            padding: 10px;
+            width: calc(100% - 22px);
+            border: none;
+            border-radius: 5px;
+            background-color: #444;
+            color: white;
+        }
+        hr {
+            border-color: #555;
+            margin: 20px 0;
+        }
+        section {
+            margin-bottom: 20px;
+        }
+        .setting-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .setting-group > div {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        textarea{
+            width: 500px;
+            height:300px;
+            background-color: #1b1b1b;
+            color: whitesmoke;
+            border-radius: 15px;     
+            border: none;
+        }
+
+        /* hide da scrollbar lol */
+
+        textarea::-webkit-scrollbar {
+            display : none;
+        }
+
+
+
     </style>
-    <body>
-        <div class="main"></div> <!-- Stars effect -->
+</head>
+<body>
 
-        <center>
+    <div id="toolbar">
+        <style>
+            .material-symbols-outlined {
+                transition: background-color 0.3s, transform 0.3s;
+    }
+    
+    .material-symbols-outlined:hover {
+      transition: transform 0.2s, box-shadow 0.2s; /* Smoother transitions */
+      transform: scale(1.15); /* Subtle scaling effect */
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Deeper shadow on hover */
+    }
+    
+    
+        </style>
+        <img src="assets/images/logo_trans.png" id="glitch-logo" alt="Glitch">
+        <div id="nav-links">
+            <div id="separator"></div>
+            
+            <div onclick="window.location.href = 'main.html'"  style="display: flex;">
+            <span class="material-symbols-outlined">home</span>
+            <h3 onclick="window.location.href = 'main.html'">Home</h3>
+            </div>
+            <h3>/</h3> 
+            
+            <div onclick="window.location.href = 'apps.html'" style="display: flex;">
+            <span class="material-symbols-outlined">apps</span>
+            <h3 >Apps</h3>
+          </div>
+            <h3>/</h3>
+            <div onclick="window.location.href = 'discord.html'"  style="display: flex;">
+            <span class="material-symbols-outlined">chat</span>
+            <h3>Discord</h3>
+          </div>
+          <h3>/</h3>
+          
+          <div onclick="window.location.href = 'abtbrw.html'"  style="display: flex;">
+    
+            <span class="material-symbols-outlined">language</span>
+            <h3>Browser</h3>
+          </div>
+            <h3>/</h3>
+            <div onclick="window.location.href = 'settings.html'" style="display: flex;">
+            <span class="material-symbols-outlined" style="font-variation-settings: filled;">settings</span>
+            <h3 >Settings</h3>
+          </div>
+            <h3>|</h3>
+            <h3 id="time">hai</h3>
+        </div>
+        <script>
+            function updateTime() {
+    const timeElement = document.getElementById('time');
+    if (!timeElement) return;
+    
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+    
+    const timeStr = `${hours}:${minutesStr} ${ampm}`;
+    timeElement.textContent = timeStr;
+    }
+    
+    setInterval(updateTime, 5000);
+    updateTime(); 
+        </script>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+        <h1>Settings</h1>
+        <button onclick="localStorage.clear();">Reset all settings</button>
+        <button onclick="save()">Save your data</button>
+        <button onclick="load()">Load your data</button>
+
+        <hr>
+
+        <div class="setting-group">
             <div>
-               <div>Settings</div>
-               <hr color="white" width="50%">
-               <button onclick="localStorage.clear();">Reset all settings</button>
-               <button onclick="save()">Save your data ( No relogins on new link )</button>
-               <button onclick="load()">Load your data</button>
-               <hr color="white" width="50%">
-               <h4>Default search engine</h4>
-               <select id="engine">
-                  <option value="Google">Google</option>
-                  <option value="DuckDuckGo">DuckDuckGo</option>
-                  <option value="Bing">Bing</option>
-                  <option value="Yahoo">Yahoo</option>
-               </select> 
-               <hr color="white" width="50%">
-               <button style="display: none;"="enable_resolve" id="enable_resolve">Toggle Glitch's Resolver</button>
-               <hr color="white" width="50%">
-               <button id="theme" style="display: none;">Cycle through themes</button>
-               <hr color="white" width="50%" id="theme_div" style="display: none;">
-               <button id="ai" style="display: none;">Toggle Anti-Url Steal/Anti Teacher A.I</button>
-               <hr color="white" width="50%" id="ai_div" style="display: none;">
-               <p>Debug info:<br> <span id="debug"></span></p>
-               <h3><a href="./main.html"> Return To Main Page</a></h3>
-               <!-- File loader element -->
-               <input type="file" id="fileinput" style="display: none;">
+                <h4>Toggle Auto-Hide</h4>
+                <button onclick="toggle_autohide()">Toggle Auto-Hide</button>
+            </div>
+            <div>
+                <h4>Tab Cloaker</h4>
+                <select id="tab_cloak_icon">
+                    <option value="default" selected>Default</option>
+                    <!-- Add more options as needed -->
+                </select>
+                <button>Save</button>
+                <button>Reset Cloak</button>
+            </div>
+            <div>
+                <h4>Panic Key</h4>
+                <input id="panic_key" placeholder="Input a key" type="text">
+                <input id="destination" placeholder="Panic Website (ex. google.com)" type="text">
+                <button onclick="localStorage.setItem('pkkey',document.getElementById('panic_key').value);localStorage.setItem('destination_pk',document.getElementById('destination').value); alert('Set!');">Set as panic key</button>
+            </div>
+        </div>
 
+        <hr>
+
+        <section id="search-engine-settings">
+            <h4>Search Engine</h4>
+            <select id="engine">
+                <option value="Google" selected>Google (default)</option>
+                <option value="DuckDuckGo">DuckDuckGo</option>
+                <option value="Bing">Bing</option>
+                <option value="Yahoo">Yahoo</option>
+            </select>
+        </section>
+
+        <section id="proxy-settings" style="display: none;">
+            <h4>Bridge / Second proxy</h4>
+            <p>A bridge/second proxy is a proxy that is overlayed ontop of the UV proxy providing the abililty to view any website from anywhere at any time. It is reccomended that you utilize offical bridges such as the ones labled in green. Bridges that are labled in red arn't truly a second proxy and will not do much besides be "cool".</p>
+            <select id="proxy">
+                <option value="None (Built-in only)" selected>None (Built-in only)</option>
+                <option value="12FT">12FT</option>
+                <option value="Glitch EU Proxy" style="color: rgb(94, 214, 94);">Glitch EU Proxy</option>
+                <option value="Archive.org/Wayback Machine" style="color: red;">Archive.org/Wayback Machine</option>
+                <option value="Google Cache" style="color: red;">Google Cache</option>
+            </select>
+        </section>
+
+        <hr>
+
+        <section id="ads-settings">
+            <button id="ads">Toggle ADs</button>
+        </section>
+
+        <hr>
+
+        <section id="premium-key-usage">
+            <center>
+                
+            <div id="keyDiv"></div>
+            <h4>Use Key</h4>
+            <input id="key" type="text" placeholder="Input your key">
+      
+            <button id="useKey">Use Key</button>
+            <div id="options" style="display: none;">
+                <h4>You have <span style="color: rgb(141, 7, 141);">Premium</span></h4>
+                <button onclick="toggle('forced_cloak')">Toggle Force Cloak</button>
+                <button onclick="toggle('ai_teacher_detector')">Toggle AI Teacher Detector (BETA)</button>
+                <br>
+                <h5> Custom CSS </h5>
+
+                <textarea id="editor"></textarea>
+                <br>
+
+                <button onclick="localStorage.setItem('custom_css', document.getElementById('editor').value); location.reload()">Apply CSS</button>
+                <button onclick="localStorage.setItem('custom_css', null)">Reset CSS</button>
+
+                <br>
+                <h5> Password Protect </h5>
+                <input placeholder="Input a password to password protect this instance!" id="password">
+                <button onclick="localStorage.setItem('password',document.getElementById(`password`).value)">Apply password</button>
+                
+                <button onclick="localStorage.setItem('password', null)">Remove password</button>
+
+                <script>
+                    fetch("scripts/css/global.css")
+                        .then(response => response.text())
+                        .then(css => document.getElementById("editor").value = css);
+                </script>
+                </center>
             </div>
-            </div>
-        </center>
+            
+
     </body>
-    <script>
-
-        document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem("search_engine") != null) {
-                document.getElementById("engine").value = localStorage.getItem("search_engine");    
-            }
-            setInterval(function() {
-                env = document.getElementById("engine").value
-                localStorage.setItem("search_engine", env);
-            }, 10)
-        })
-        const debug = document.getElementById("debug");
-        debug.innerHTML =+ "Host:" + location.host + "<br>" + "Protocol:" + location.protocol + "Version: " + "v5 Beta" + "<br>" + "Connecting from: " + navigator.connection.effectiveType + " internet" + "<br> Platform: " + navigator.platform;
-
-        document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem("resolver_default") == "false") {
-                document.getElementById("enable_resolve").style.display = "none";
-            }
-            if (localStorage.getItem("themes") == "true" || true) {
-                document.getElementById("theme").style.display = "block";
-                document.getElementById("theme_div").style.display = "block";
-            }
-            if (localStorage.getItem("ai_teacher_detection") == "true" || true) {
-                document.getElementById("ai").style.display = "block";
-                document.getElementById("ai_div").style.display = "block";
-            }
-        })
-        const enable_resolve = document.getElementById("enable_resolve");
-
-        enable_resolve.addEventListener("click", function() {
-            if (localStorage.getItem("enable_resolve") == "false" || localStorage.getItem("enable_resolve") == null) {
-                localStorage.setItem("enable_resolve", "true");
-            }
-            else {
-                localStorage.setItem("enable_resolve", "false");
-            }
-
-        });
-
-        // Define the themes
-const themes = [
-    { id: "dark", backgroundColor: "black", color: "white", class: "stars" },
-    { id: "ocean", backgroundColor: "#005493", color: "white", class: "" },
-    { id: "light", backgroundColor: "white", color: "black", class: "" },
-    { id: "forest", backgroundColor: "#013220", color: "white", class: "forest" },
-    { id: "sunset", backgroundColor: "orange", color: "white", class: "" },
-];
-
-// Initial theme index
-let currentThemeIndex = 0;
-
-document.getElementById("theme").addEventListener("click", function() {
-    if (localStorage.getItem("themes") == "false" || localStorage.getItem("themes") == null) {
-        return // Disabled   
-    }
-    // Update the current theme index
-    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-
-    // Get the new theme
-    const theme = themes[currentThemeIndex];
-
-    // Update local storage
-    localStorage.setItem("theme", theme.id);
-
-    // Apply the new theme styles
-    document.body.style.backgroundColor = theme.backgroundColor;
-    document.body.style.color = theme.color;
-
-    // Manage additional classes
-    const mainDiv = document.getElementsByClassName("main")[0];
-    if (mainDiv) {
-        mainDiv.className = "main " + theme.class; // Ensure that 'main' class is always there along with the theme-specific class
-    }
-});
-
-// Initial theme setup
-document.addEventListener("DOMContentLoaded", function() {
-    const savedThemeId = localStorage.getItem("theme");
-    const savedTheme = themes.find(t => t.id === savedThemeId) || themes[0];
-    document.body.style.backgroundColor = savedTheme.backgroundColor;
-    document.body.style.color = savedTheme.color;
-    const mainDiv = document.getElementsByClassName("main")[0];
-    if (mainDiv) {
-        mainDiv.className = "main " + savedTheme.class;
-    }
-});
-
-
-
-function save() {
-    let data = "";
-
-    for (const [key, value] of Object.entries(localStorage)) {
-        if (key.includes("data")) {
-            data += key + "=" + value + "\n";
-        }
-    }
-
-    var blob = new Blob([btoa(data)], { type: "text/plain;charset=utf-8" });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.href = url;
-    a.download = "data.glitch";
-    document.body.appendChild(a); // Append the anchor to body
-    a.click(); // Simulate click on the anchor
-    document.body.removeChild(a); // Remove the anchor from body
-    URL.revokeObjectURL(url); // Clean up the URL object
-}
-
-function load() {
-    const input = document.getElementById("fileinput");
-    if (input) {
-        input.removeEventListener("change", handleFileSelect); // Safe to call if input exists
-        input.addEventListener("change", handleFileSelect);
-        input.click();
-    } else {
-        console.error("File input element not found!");
-    }
-}
-
-
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-        let contents = e.target.result;
-
-        // Decode Base64
-        contents = atob(contents);
-
-        // Split into lines
-        const lines = contents.split("\n");
-
-        for (const line of lines) {
-            if (line.trim().length > 0) {
-                const [key, value] = line.split("=");
-                localStorage.setItem(key, value);
-            }
-        }
-    };
-
-    reader.readAsText(file);
-}
-
-
-
-
-
-
-
-
-
-    </script>
+    <script src="scripts/js/global.js"></script>
 </html>
-

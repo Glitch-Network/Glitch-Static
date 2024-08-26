@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Glitch - New Tab</title>
+    
+  <script src="uv/uv.bundle.js" defer></script>
+  <script src="uv/uv.config.js" defer></script>
+  <script src="index.js" defer></script>
+  <script src="register-sw.js" defer></script>
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <style>body {overflow: hidden;}</style>
+    <link rel="stylesheet" type="text/css" href="scripts/css/global.css">
+</head>
+<body>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <center><h1>New Page</h1>
+
+ 
+            <div class="container">
+                <div class="searchInput">
+
+                    <input id="search" placeholder="Search..." type="text" style="width: 70%; height: 25px; background-color: #131313; border: none; padding: 15px; color: white; border-radius: 20px;"/>
+            
+
+                  <div class="resultBox">
+                    <!-- here list are inserted from javascript -->
+                  </div>
+<span class="material-symbols-outlined" style="right: 15%; bottom: calc(45% - 10px); position: absolute;">search</span>
+                </div>
+              </div>
+            <br>
+
+            <br>
+            <br>
+
+            </center>
+
+
+            </div>
+        </center>
+    </div>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    window.location = ("launch_page.html?url=" + document.getElementById("search").value);
+                }
+            });
+
+
+        });
+
+
+        let suggestions = [
+    
+];
+
+// getting all required elements
+const searchInput = document.querySelector(".searchInput");
+const input = searchInput.querySelector("input");
+const resultBox = searchInput.querySelector(".resultBox");
+const icon = searchInput.querySelector(".icon");
+let linkTag = searchInput.querySelector("a");
+let webLink;
+
+
+    let search_engine_preference = localStorage.getItem("search_engine");
+    let search_engine = "https://www.google.com/search?q="; // Default search engine
+    const proxy_bridge = localStorage.getItem("proxy");
+    const premium_status = localStorage.getItem("premium") === "true";
+
+
+    // Set search engine based on preference
+    if (search_engine_preference) {
+      switch (search_engine_preference) {
+        case "Google":
+          search_engine = "https://www.google.com/search?q=";
+          break;
+        case "DuckDuckGo":
+          search_engine = "https://duckduckgo.com/?q=";
+          break;
+        case "Bing":
+          search_engine = "https://www.bing.com/search?q=";
+          break;
+        case "Yahoo":
+          search_engine = "https://search.yahoo.com/search?p=";
+          break;
+        case "Torry":
+          search_engine = premium_status ? "https://www.torry.io/search/?type=oniontab&searchby_type=1&page=1&q=" : "https://www.google.com/search?q=";
+          break;
+        case "Startpage":
+          search_engine = premium_status ? "https://www.startpage.com/do/search?query=" : "https://www.google.com/search?q=";
+          break;
+        case "Qwant":
+          search_engine = premium_status ? "https://www.qwant.com/?t=web&q=" : "https://www.google.com/search?q=";
+          break;
+        case "Brave":
+          search_engine = premium_status ? "https://search.brave.com/search?q=" : "https://www.google.com/search?q=";
+          break;
+        case "Google Scholar":
+          search_engine = premium_status ? "https://scholar.google.com/scholar?q=" : "https://www.google.com/search?q=";
+          break;
+        default:
+          search_engine = "https://www.google.com/search?q=";
+          search_engine_preference = "Google"
+          break;
+      }
+
+    }
+    else{
+        search_engine = "https://www.google.com/search?q=";
+          search_engine_preference = "Google"
+      }
+
+// if user press any key and release
+input.onkeyup = (e)=>{
+    let userData = e.target.value; //user enetered data
+    let emptyArray = [];
+    if(userData){
+        fetch("/search_complete/" + encodeURIComponent(userData))
+  .then(response => response.text())
+  .then(data => {
+    jsonData = JSON.parse(data);
+    suggestions = jsonData[1]; // Assuming the suggestions are in the second element of the JSON response
+  });
+        emptyArray = suggestions.filter((data)=>{
+            //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
+            return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase()); 
+        });
+        emptyArray = emptyArray.map((data)=>{
+            // passing return data inside li tag
+            return data = `<li onclick="window.location='launch_page.html?url=${encodeURIComponent(search_engine+data)}'">`+ data + " - <span style='filter: opacity(0.4);'>"+ search_engine_preference +" Search</span>" +'</li>';
+        });
+        searchInput.classList.add("active"); //show autocomplete box
+        showSuggestions(emptyArray);
+        
+    }else{
+        searchInput.classList.remove("active"); //hide autocomplete box
+    }
+}
+
+function showSuggestions(list){
+    let listData;
+    if(!list.length){
+        userValue = inputBox.value;
+        listData = '<li>'+ userValue +'</li>';
+    }else{
+        listData = list.join('');
+    }
+    resultBox.innerHTML = listData;
+}
+
+    </script>
+    <script src="scripts/js/global.js"></script>
+</body>
+</html>

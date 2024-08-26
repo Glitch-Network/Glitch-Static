@@ -1,57 +1,313 @@
-<script>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Glitch - Home</title>
+    
+  <script src="uv/uv.bundle.js" defer></script>
+  <script src="uv/uv.config.js" defer></script>
+  <script src="index.js" defer></script>
+  <script src="register-sw.js" defer></script>
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <style>body {overflow: hidden;}</style>
 
-if (config["premium-key"] =="xy12gsbl"||config["premium-key"] =="sdfhg3w3"||config["premium-key"] =="sdjh32s" || config["premium-key"] == "13dsadg32r") {
-localStorage.setItem("theme", "dark");
-localStorage.setItem("premium", "true");
-// load config 
+    <link rel="stylesheet" type="text/css" href="scripts/css/global.css">
+</head>
+<body>
+    <div id="app">
+        <div id="toolbar">
+            <style>
+                .material-symbols-outlined {
+                    transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .material-symbols-outlined:hover {
+          transition: transform 0.2s, box-shadow 0.2s; /* Smoother transitions */
+          transform: scale(1.15); /* Subtle scaling effect */
+          box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Deeper shadow on hover */
+        }
+        
+        
+            </style>
+            <img src="assets/images/logo_trans.png" id="glitch-logo" alt="Glitch">
+            <div id="nav-links">
+                <div id="separator"></div>
+                
+                <div onclick="window.location.href = 'main.html'"  style="display: flex;">
+                <span class="material-symbols-outlined">home</span>
+                <h3 onclick="window.location.href = 'main.html'">Home</h3>
+                </div>
+                <h3>/</h3> 
+                
+                <div onclick="window.location.href = 'apps.html'" style="display: flex;">
+                <span class="material-symbols-outlined">apps</span>
+                <h3 >Apps</h3>
+              </div>
+                <h3>/</h3>
+                <div onclick="window.location.href = 'discord.html'"  style="display: flex;">
+                <span class="material-symbols-outlined">chat</span>
+                <h3>Discord</h3>
+              </div>
+              <h3>/</h3>
+              
+              <div onclick="window.location.href = 'abtbrw.html'"  style="display: flex;">
+        
+                <span class="material-symbols-outlined">language</span>
+                <h3>Browser</h3>
+              </div>
+                <h3>/</h3>
+                <div onclick="window.location.href = 'settings.html'" style="display: flex;">
+                <span class="material-symbols-outlined" style="font-variation-settings: filled;">settings</span>
+                <h3 >Settings</h3>
+              </div>
+                <h3>|</h3>
+                <h3 id="time">hai</h3>
+            </div>
+            <script>
+                function updateTime() {
+        const timeElement = document.getElementById('time');
+        if (!timeElement) return;
+        
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = now.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+        
+        const timeStr = `${hours}:${minutesStr} ${ampm}`;
+        timeElement.textContent = timeStr;
+        }
+        
+        setInterval(updateTime, 5000);
+        updateTime(); 
 
-if (config["auto-host"] == "True") {
-    document.getElementById("auto-host").checked = true;
+        if (localStorage.getItem("host") == null){
+          x = prompt("Enter your Host URL.")
+          if (!x.startsWith("https://")) {x="https://"+x}
+          localStorage.setItem("host",x)
+        }
+            </script>
+        </div>
+    </div>
+    <br>
+
+    <div id="content">
+        <center>
+            <br>
+            <br>
+            <br>
+            <h1 style="font-size: 70px;">Glitch</h1>
+            <br>
+
+            <div class="tos-notification" style="display: none;">
+                <div class="tos-content" style="color: black; text-align: left; padding: 20px; background-color: #fff; border-radius: 10px; width: 70%;">
+                    <h2>Welcome!</h2>
+                    <p>
+                        Welcome to Glitch! The proxy that knows <b>NOTHING</b> about you. There is a catch, though: you need to agree to our TOS. 
+                        It says that we not liable for any actions you take while using our service, mainly because we don't know what you do.
+                        <br>
+
+                    </p>
+                    <p>
+                        The TOS is available <a href="tos.md">here</a>.
+                        By using any Glitch service on or after the publication of these terms, you acknowledge and accept these terms.
+                    </p>
+                    <p>
+                        <button class="close-tos-btn" style="background-color: #131313; color: white; padding: 10px; border: none; border-radius: 5px;">I Agree</button>
+                    </p>
+                </div>
+            </div>
+            <div class="container">
+                <div class="searchInput">
+
+                    <input id="search" placeholder="Search..." type="text" style="width: 70%; height: 25px; background-color: #131313; border: none; padding: 15px; color: white; border-radius: 20px;"/>
+            
+
+                  <div class="resultBox">
+                    <!-- here list are inserted from javascript -->
+                  </div>
+<span class="material-symbols-outlined" style="right: 15%; bottom: calc(45% - 10px); position: absolute;">search</span>
+                </div>
+              </div>
+            <br>
+            <button id="cloak" class="main_button">Cloak</button>
+            <button class="main_button" onclick="window.location='https://discord.gg/mWGtwnyjgK'">Join the Discord</button>   
+            <button class="main_button" onclick="window.location='contributers.html'">Contributers</button>   
+            <br>
+            <br>
+            <center>
+            <img id="rr" style=" margin-bottom: 350px; border-radius: 15px; border: #131313 2px solid; width: 350px; height: 150px; margin-top: 230px" onclick="window.open('https://discord.gg/2n3NHNBzda')" src="assets/ads/youradhere.png">
+        </center>
+
+
+            </div>
+        </center>
+
+        <div style="position: fixed; right: 35px; bottom: 25px;">
+
+
+
+            <h2 style="color: rgb(50, 141, 245);" onclick="window.location='premium.html'">Premium</h2></div>
+    </div>
+
+    <script>
+            document.getElementById("cloak").addEventListener("click",function(){
+      function load() {
+        var x = "main.html";
+            var code = `
+                <body style="background-color: black">
+                <iframe src="` + x + `" frameborder="0" style="border: none; background-color: black" width="100%" height="100%"></iframe>
+                </body>
+            `;
+            var newWindow = window.open("about:blank", "_blank");
+            newWindow.document.write(code);
+            newWindow.document.body.style.backgroundColor = "black";
+            window.close();
+
+            }
+
+            load()
+    })
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    window.location = ("/launch.html?url=" + document.getElementById("search").value);
+                }
+            });
+
+
+            // Check if this is the first time visiting
+            if (!localStorage.getItem("first_time_visiting")) {
+                document.querySelector(".tos-notification").style.display = 'block';
+            }
+
+            // Add event listener to TOS close button
+            document.querySelector(".close-tos-btn").addEventListener('click', function() {
+                document.querySelector(".tos-notification").style.display = 'none';
+                localStorage.setItem("first_time_visiting", "1");
+            });
+        });
+
+        if (localStorage.getItem("hide_ad") == "1") {
+            document.getElementById("rr").style.display = "none";
+        }
+        const ads = ["galaxy.png", "outpost.png", "youradhere.png", "youcanturnoffads.png"];
+        const ads_urls = ["https://discord.gg/8wEk32uKQk", "https://discord.gg/4AeuJJHNj9", "https://discord.gg/2n3NHNBzda", "https://ublock.org"];
+        let current_ad = 0;
+
+        setInterval(function () {
+            document.getElementById("rr").src = localStorage.getItem("host") + "/assets/ads/" + ads[current_ad];
+            if (current_ad === ads.length - 1) current_ad = 0;
+            else current_ad = (current_ad + 1) % ads.length;
+
+            document.getElementById("rr").onclick = function () {
+                window.open(ads_urls[current_ad]);
+            };
+        }, 10000); // every 10 seconds
+
+        let suggestions = [
+    
+];
+
+// getting all required elements
+const searchInput = document.querySelector(".searchInput");
+const input = searchInput.querySelector("input");
+const resultBox = searchInput.querySelector(".resultBox");
+const icon = searchInput.querySelector(".icon");
+let linkTag = searchInput.querySelector("a");
+let webLink;
+
+
+    let search_engine_preference = localStorage.getItem("search_engine");
+    let search_engine = "https://www.google.com/search?q="; // Default search engine
+    const proxy_bridge = localStorage.getItem("proxy");
+    const premium_status = localStorage.getItem("premium") === "true";
+
+
+    // Set search engine based on preference
+    if (search_engine_preference) {
+      switch (search_engine_preference) {
+        case "Google":
+          search_engine = "https://www.google.com/search?q=";
+          break;
+        case "DuckDuckGo":
+          search_engine = "https://duckduckgo.com/?q=";
+          break;
+        case "Bing":
+          search_engine = "https://www.bing.com/search?q=";
+          break;
+        case "Yahoo":
+          search_engine = "https://search.yahoo.com/search?p=";
+          break;
+        case "Torry":
+          search_engine = premium_status ? "https://www.torry.io/search/?type=oniontab&searchby_type=1&page=1&q=" : "https://www.google.com/search?q=";
+          break;
+        case "Startpage":
+          search_engine = premium_status ? "https://www.startpage.com/do/search?query=" : "https://www.google.com/search?q=";
+          break;
+        case "Qwant":
+          search_engine = premium_status ? "https://www.qwant.com/?t=web&q=" : "https://www.google.com/search?q=";
+          break;
+        case "Brave":
+          search_engine = premium_status ? "https://search.brave.com/search?q=" : "https://www.google.com/search?q=";
+          break;
+        case "Google Scholar":
+          search_engine = premium_status ? "https://scholar.google.com/scholar?q=" : "https://www.google.com/search?q=";
+          break;
+        default:
+          search_engine = "https://www.google.com/search?q=";
+          search_engine_preference = "Google"
+          break;
+      }
+
+    }
+    else{
+        search_engine = "https://www.google.com/search?q=";
+          search_engine_preference = "Google"
+      }
+
+// if user press any key and release
+input.onkeyup = (e)=>{
+    let userData = e.target.value; //user enetered data
+    let emptyArray = [];
+    if(userData){
+        fetch(localStorage.getItem("host") + "/search_complete/" + encodeURIComponent(userData))
+  .then(response => response.text())
+  .then(data => {
+    jsonData = JSON.parse(data);
+    suggestions = jsonData[1]; // Assuming the suggestions are in the second element of the JSON response
+  });
+        emptyArray = suggestions.filter((data)=>{
+            //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
+            return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase()); 
+        });
+        emptyArray = emptyArray.map((data)=>{
+            // passing return data inside li tag
+            return data = `<li onclick="window.location='launch.html?url=${encodeURIComponent(search_engine+data)}'">`+ data + " - <span style='filter: opacity(0.4);'>"+ search_engine_preference +" Search</span>" +'</li>';
+        });
+        searchInput.classList.add("active"); //show autocomplete box
+        showSuggestions(emptyArray);
+        
+    }else{
+        searchInput.classList.remove("active"); //hide autocomplete box
+    }
 }
-else {
-    document.getElementById("auto-host").checked = false;
+
+function showSuggestions(list){
+    let listData;
+    if(!list.length){
+        userValue = inputBox.value;
+        listData = '<li>'+ userValue +'</li>';
+    }else{
+        listData = list.join('');
+    }
+    resultBox.innerHTML = listData;
 }
 
-if (config["ai_teacher_detection"] == "True") {
-    document.getElementById("ai_teacher_detection").checked = true;
-}
-else {
-    document.getElementById("ai_teacher_detection").checked = false;
-}
-
-if (config["themes"] == "True") {
-    document.getElementById("themes").checked = true;
-}
-else {
-    document.getElementById("themes").checked = false;
-}
-
-if (config["resolver_default"] == "True") {
-    document.getElementById("resolver_default").checked = true;
-}
-else {
-    document.getElementById("resolver_default").checked = false;
-}
-
-if (config["change_discord_inv_url"] == "True") {
-    document.getElementById("change_discord_inv_url").checked = true;
-    document.getElementById("new_discord_inv_url").value = config["new_discord_inv_url"];
-}
-else {
-    document.getElementById("change_discord_inv_url").checked = false;
-}
-
-} else{localStorage.setItem("premium", "false");}
-
-
-
-
-
-  </script>
-  <br>
-  <a id="redirect" href="./index.html">Go back to Glitch</a>
-  <script>
-    document.getElementById("redirect").click()
-  </script>
+    </script>
+    <script src="scripts/js/global.js"></script>
 </body>
 </html>

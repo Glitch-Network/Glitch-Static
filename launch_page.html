@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+  <title>Glitch</title>
+  <meta name="googlebot" content="index, follow, snippet" />
+  <link rel="shortcut icon" content="favicon.ico" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="stylesheet" href="scripts/css/global.css" />
+  <script src="index.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@250" rel="stylesheet">
+
+  <style>
+ body {
+    background-color: black;
+    margin: 0;
+    overflow: hidden;
+}
+
+#searchbar {
+    background-color: #2c2c2c;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    z-index: 15;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+#searchbar input {
+    background-color: rgb(63, 63, 63);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+img {
+    width: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+#searchbar input:focus {
+    outline: none;
+}
+
+#uv-frame {
+    width: 100%;
+    height: calc(100vh - 40px);
+    border: none;
+    position: absolute;
+    top: 40px;
+    left: 0;
+}
+
+#home, #refresh {
+    margin-right: 10px;
+    filter: invert(1);
+    cursor: pointer;
+}
+
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid;
+  border-color: white transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-278K4F012J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-278K4F012J');
+  </script>
+
+
+</head>
+<body>
+  <center>
+    <div id="searchbar">
+      <span id="refresh" onclick="window.location.reload()" class="material-symbols-outlined" style="margin-right: 25px; color: black;">refresh</span>
+      <input id="search" oninput="search()" placeholder="Input a URL or search..." type="search"/>
+      <span onclick="window.location = `launch_page.html?${url=document.getElementById('search').value}`" class="material-symbols-outlined" style="margin-left: 25px;">search</span>
+
+      
+    </div>
+    <div id="frames">
+      <form id="uv-form" class="flex-center">
+        <input
+          id="uv-search-engine"
+          value="https://www.google.com/search?q=%s"
+          type="hidden"
+        />
+      <input style="display: none;" id="uv-address" type="text" placeholder="Search the web freely" />
+    </form>
+    <iframe style="border: none; height: 100vh; width: 100vw" id="uv-frame">
+      <div class="loader"></div>
+    </iframe>
+    </div>
+    </center>
+
+    <script>
+      typing = 0
+            document.getElementById("search").addEventListener("focusin",function(){typing=1})
+            document.getElementById("search").addEventListener("focusout",function(){typing=0})
+            
+
+      function getURLParameter(name) {
+          name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+          var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+          var results = regex.exec(location.search);
+          return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+      }
+      localStorage.setItem("url", getURLParameter("url"));
+
+
+      document.getElementById("uv-frame").onload = function () {
+                let frame = document.getElementById("uv-frame"); 
+                frameTitle = frame.contentDocument.title;
+                document.title = frameTitle;
+                last_title = frameTitle;
+                setInterval(function () {
+                    frameTitle = frame.contentDocument.title;
+                    if (frameTitle != last_title) {
+                        document.title = frameTitle;
+                        last_title = frameTitle;
+                    }
+                }, 500);
+            };
+
+            
+            setTimeout(function(){
+           setInterval(function(){
+             try{
+               if (typing == 0){
+               var frame = document.getElementById("uv-frame");
+               x = frame.contentWindow.location.href
+
+               const xor = {
+    encode(str) {
+      if (!str) return str;
+      let result = "";
+      for (let i = 0; i < str.length; i++) {
+        result += i % 2 ? String.fromCharCode(str.charCodeAt(i) ^ 2) : str[i];
+      }
+      return encodeURIComponent(result);
+    },
+    decode(str) {
+      if (!str) return str;
+      const [input, ...search] = str.split("?");
+      let result = "";
+      const decoded = decodeURIComponent(input);
+      for (let i = 0; i < decoded.length; i++) {
+        result +=
+          i % 2 ? String.fromCharCode(decoded.charCodeAt(i) ^ 2) : decoded[i];
+      }
+      return result + (search.length ? "?" + search.join("?") : "");
+    },
+};
+
+               x = xor.decode(x.split("/uv/service/")[1]);
+
+               if(x != document.getElementById("search").value){
+
+                if (x != undefined && x != "undefined"){
+                
+                 document.getElementById("search").value = x
+                }
+                }
+               }
+               
+             }
+             catch(e){console.log(e)}
+           },500)
+        },1000)
+
+
+
+  </script>
+   <!--  <script src="scripts/js/proxy.js"></script>-->
+  </body>
+</html>
