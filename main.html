@@ -360,13 +360,13 @@ function addWindowFunctionality(windowElement, header) {
 }
 function openApp(app){
     if (app == "game"){
-        createWindow(Math.random().toString(36).substring(2, 15), 'Games', '<iframe src="apps.html" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);
+        createWindow(Math.random().toString(36).substring(2, 15), 'Games', '<iframe src="'+localStorage.getItem("link")+'/apps.html" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);
     }
     else if (app == "web"){
         createWindow(Math.random().toString(36).substring(2, 15), 'Tabs', '<iframe src="launch.html" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);
     }
     else if (app == "discord"){
-        createWindow(Math.random().toString(36).substring(2, 15), 'Discord', '<iframe src="/assets-images/backgrounds/aHZ0cnM4JTJGLWRrc2FvcGQlMkNjbW0tYXFzZ3RxJTJGJTYwOSUzQjk3NTA1YzUwZGE1JTNBYWdjZDUlMkNzdGc%3D" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);
+        createWindow(Math.random().toString(36).substring(2, 15), 'Discord', '<iframe src="'+localStorage.getItem("link")+'/assets-images/backgrounds/aHZ0cnM4JTJGLWRrc2FvcGQlMkNjbW0tYXFzZ3RxJTJGJTYwOSUzQjk3NTA1YzUwZGE1JTNBYWdjZDUlMkNzdGc%3D" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);
     }
     else if (app == "terminal"){
       createWindow(Math.random().toString(36).substring(2, 15), 'Terminal', '<iframe src="/features/terminal.html" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);  
@@ -385,10 +385,10 @@ function openApp(app){
     }
     else if (app == "gpt"){
         //https://deepseek.net/chat
-        createWindow(Math.random().toString(36).substring(2, 15), 'ChatGPT', '<iframe src="/launch_page.html?url=https://deepai.org/chat/free-chatgpt" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);  
+        createWindow(Math.random().toString(36).substring(2, 15), 'ChatGPT', '<iframe src="'+localStorage.getItem("link")+'/launch_page.html?url=https://deepai.org/chat/free-chatgpt" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);  
     }
     else if (app == "tv"){
-        createWindow(Math.random().toString(36).substring(2, 15), 'Swiftly TV', '<iframe src="/launch_page.html?url=https://swifly.cloud/movies.html" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);  
+        createWindow(Math.random().toString(36).substring(2, 15), 'Swiftly TV', '<iframe src="'+localStorage.getItem("link")+'/launch_page.html?url=https://swifly.cloud/movies.html" style="border:0; flex-grow:1; width:100%; height:100%;"></iframe>', true);  
     }
 }
 

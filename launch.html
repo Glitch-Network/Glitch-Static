@@ -199,7 +199,7 @@ iframe {
     <div id="tabs">
         <div class="create_tab" onclick="load_workspace()"><span class="material-symbols-outlined">upload_file</span></div>
         <div id="tabs2"></div>
-        <div id="create_tab" onclick="createTab('New Tab', './start.html')">+</div>
+        <div id="create_tab" onclick="createTab('New Tab', localStorage.getItem('link') +'./start.html')">+</div>
     </div>
 
     <div id="frames">
@@ -250,8 +250,8 @@ upload_workspace().then((contents) => {
     x = x.split("\n")
     for (line in x){ // how the hell does this work in js
         if (x[line] != ""){
-        console.log("loading "+"launch_page.html?url="+x[line])
-        createTab("Workspace Tab", "launch_page.html?url="+x[line])
+        console.log("loading "+localStorage.getItem("link") +"/launch_page.html?url="+x[line])
+        createTab("Workspace Tab", localStorage.getItem("link") + "/launch_page.html?url="+x[line])
     }
     }
 }).catch((error) => {
@@ -379,10 +379,10 @@ upload_workspace().then((contents) => {
                     url = new_tor_url;
                 }
                 if (url) {
-                    createTab("Home", "./launch_page.html?url=" + url);
+                    createTab("Home", localStorage.getItem("link") +"/launch_page.html?url=" + url);
                 }
                 else {
-                    createTab("New Tab", "start.html")
+                    createTab("New Tab", localStorage.getItem("link") +"start.html")
                 }
                 initialized = 1;
             }
