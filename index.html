@@ -1,24 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Glitch - Home</title>
-  <meta name="description" content="Glitch is a highly advanced proxy for all your needs.">
-</head>
-<body>
+<script>
 
-  <script>
+if (localStorage.getItem("link") == null){
+  x = prompt("Enter a Glitch link (REQUIRED)") 
+  localStorage.setItem("link",x)
+}
 
-    localStorage.setItem("show_ads","0")
-
-    if (localStorage.getItem("forced_cloak") == "false" || localStorage.getItem("forced_cloak") == null){
-      window.location = "force_cloak.html";
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'g' || event.key === 'G') {
+    window.location.href = 'main.html';
+  }
+  if (event.key === "r"){
+    localStorage.clear()
+    // Clear so i dont have to deal with a yapper
+  }
+  else if (event.key === 'c' || event.key === 'C') {
+    let newWindow = window.open('about:blank');
+    if (newWindow) { // Check if window was opened successfully (popup blockers)
+      newWindow.document.write('<iframe src="main.html" style="border:0; position: fixed; top: 0; left: 0; width: 100%; height: 100%;"></iframe>');
+      newWindow.document.close();
+      window.location="https://google.com/search?q=math"
+    } else {
+      alert('Please allow popups to open main.html in a new window.');
     }
-    else{
-      window.location = "main.html"
-    }
 
+  }
+});
 
-  </script>
-    
-</body>
-</html>
+</script>

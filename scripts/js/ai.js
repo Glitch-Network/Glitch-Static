@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-
+    
     // Checking if the required settings are enabled in localStorage
     if (localStorage.getItem("ai_teacher_detection") === "true" && localStorage.getItem("premium") === "true") {
 
@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
             script.src = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs";
             script.onload = main; // Automatically start the main function after TensorFlow.js is loaded
             document.head.appendChild(script);
+            
         };
 
         async function setupWebcam() {
@@ -83,3 +84,4 @@ document.addEventListener("DOMContentLoaded", function() {
         console.warn("A.I detection isn't enabled or premium isn't active.");
     }
 });
+

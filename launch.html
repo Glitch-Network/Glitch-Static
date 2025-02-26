@@ -9,92 +9,178 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="scripts/js/global.js"></script>
     <style>
-        body {
-            overflow: hidden;
-            background-color: #2c2c2c;
-            color: #e0e0e0;
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+   /* ✨ SLEEK & MODERN DARK TABS - Consistent with Iframe Viewer ✨ */
 
-        #tabs {
-            display: flex;
-            margin-top: 5px;
-            flex-wrap: nowrap;
-            z-index: 2;
-            overflow-x: auto;
-            align-items: center;
-            height: 45px; 
-            background-color: #2c2c2c;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            padding: 0 15px;
-            border-bottom: #2c2c2c 3px solid;
-        }
+/* Import Font - Ensure consistency across components */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 
-        .tab {
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            border-radius: 4px 4px 0 0;
-            background-color: #333;
-            color: #e0e0e0;
-            cursor: pointer;
-            margin: 0 5px;
-            height: 100%;
-            transition: background-color 0.3s, color 0.3s;
-        }
+/* -------------------------------------------------- */
+/* ✨ Root Variables -  Consistent Theme Palette (From Iframe Viewer) ✨ */
+/* -------------------------------------------------- */
+:root {
+  /* Primary Dark Theme Palette - (Consistent with Iframe Viewer) */
+  --color-background: #121212;         /* Deeper Dark Background */
+  --color-surface: #1e1e1e;            /* Slightly Lighter Surface for Searchbar, Tabs etc. */
+  --color-primary: #bb86fc;            /* Purple -  Primary Accent Color */
+  --color-secondary: #03dac5;          /* Teal - Secondary Accent Color */
+  --color-text-primary: #ffffff;       /* White - Primary Text Color */
+  --color-text-secondary: #aaaaaa;     /* Light Grey - Secondary Text/Hints */
+  --color-accent: var(--color-primary); /* Default Accent is Primary */
 
-        .tab:hover {
-            background-color: #444;
-            color: #fff;
-        }
+  /* UI Elements & Spacing - (Consistent with Iframe Viewer) */
+  --spacing-unit: 10px;               /* Base Spacing Unit */
+  --padding-base: calc(var(--spacing-unit) * 0.8); /* Standard Padding */
+  --margin-base: var(--spacing-unit);  /* Standard Margin */
+  --border-radius-base: 8px;          /* Rounded Corners for UI elements */
+  --toolbar-height: 50px;              /* Height of the search bar/toolbar */
 
-        .tab p {
-            margin: 0;
-            padding: 0;
-            white-space: nowrap;
-        }
+  /* Shadows & Effects - (Consistent with Iframe Viewer) */
+  --box-shadow-normal: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle Shadow */
+  --box-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.3);/* Stronger Shadow on Hover */
+  --transition-duration: 0.3s;        /* Standard Transition Duration */
+  --transition-easing: ease-in-out;   /* Standard Transition Easing */
+}
 
-        .tab p.close {
-            margin-left: 10px;
-            font-weight: bold;
-            cursor: pointer;
-        }
 
-        #create_tab,
-        .create_tab {
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            border-radius: 4px;
-            background-color: #333;
-            color: #e0e0e0;
-            cursor: pointer;
-            margin: 0 5px;
-            height: 100%;
-            transition: background-color 0.3s, color 0.3s;
-        }
+/* -------------------------------------------------- */
+/* ✨ Base Styles - Body and Font ✨ */
+/* -------------------------------------------------- */
+body {
+  overflow: hidden; /* Prevent scrollbars */
+  font-family: "Source Sans 3", arial, sans-serif; /* Use imported font, add sans-serif fallback */
+  background-color: var(--color-surface); /*  <-- Changed to --color-surface */
+  color: var(--color-text-primary); /* Light text color from theme */
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased; /* Improve font rendering on macOS */
+  -moz-osx-font-smoothing: grayscale;   /* Improve font rendering on Firefox macOS */
+}
 
-        #create_tab:hover,
-        .create_tab:hover {
-            background-color: #444;
-            color: #fff;
-        }
 
-        #frames {
-            position: relative;
-            width: 100%;
-            height: calc(100vh - 30px);
-        }
+/* -------------------------------------------------- */
+/* ✨ Tabs Container - Horizontal Scrolling Tabs Bar ✨ */
+/* -------------------------------------------------- */
+#tabs {
+  display: flex;
+  margin-top: var(--margin-base); /* Spacing from top */
+  flex-wrap: nowrap; /* Prevent wrapping, allow horizontal scroll */
+  z-index: 2; /* Ensure tabs are above other content */
+  overflow-x: auto; /* Enable horizontal scrolling if tabs overflow */
+  align-items: center; /* Vertically center tabs */
+  height: var(--toolbar-height); /* Fixed height for tab bar */
+  background-color: var(--color-surface); /* Surface color for tab bar */
+  box-shadow: var(--box-shadow-normal); /* Subtle shadow for depth */
+  padding: 0 calc(var(--padding-base) * 1.5); /* Horizontal padding */
+  border-bottom: 3px solid var(--color-surface); /* Match bottom border to background for seamless look */
+}
 
-        iframe {
-            display: none;
-            width: 100%;
-            height: 100%;
-            border: none;
-            position: absolute;
-        }
+/* Hide scrollbar for cleaner look in some browsers */
+#tabs::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+#tabs {
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    scrollbar-width: none;   /* Firefox */
+}
+
+
+/* -------------------------------------------------- */
+/* ✨ Tab - Individual Tab Styling ✨ */
+/* -------------------------------------------------- */
+.tab {
+  display: flex;
+  align-items: center;
+  padding: 0 calc(var(--padding-base) * 1.2); /* Horizontal padding inside tab */
+  border-radius: var(--border-radius-base) var(--border-radius-base) 0 0; /* Rounded top corners */
+  background-color: #3a3a3a; /* Slightly lighter background for inactive tabs */
+  color: var(--color-text-secondary); /* Secondary text color for inactive tabs */
+  cursor: pointer;
+  margin: 0 calc(var(--margin-base) / 2); /* Spacing between tabs */
+  height: 100%; /* Fill tab bar height */
+  transition: background-color var(--transition-duration) var(--transition-easing),
+              color var(--transition-duration) var(--transition-easing),
+              box-shadow var(--transition-duration) var(--transition-easing);
+  box-shadow: none; /* No default shadow for inactive tabs */
+}
+
+.tab:hover {
+  background-color: #4a4a4a; /* Lighter background on hover */
+  color: var(--color-text-primary); /* Primary text color on hover */
+  box-shadow: var(--box-shadow-normal); /* Add subtle shadow on hover */
+}
+
+
+/* Tab Text (Title) */
+.tab p {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+
+/* Tab Close Button */
+.tab p.close {
+  margin-left: var(--margin-base); /* Spacing between title and close button */
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.7; /* Slightly faded close button */
+  transition: opacity var(--transition-duration) var(--transition-easing);
+}
+
+.tab p.close:hover {
+  opacity: 1; /* Fully visible close button on hover */
+}
+
+
+/* -------------------------------------------------- */
+/* ✨ Create Tab Button -  Styling for "New Tab" Button ✨ */
+/* -------------------------------------------------- */
+#create_tab,
+.create_tab {
+  display: flex;
+  align-items: center;
+  padding: 0 calc(var(--padding-base) * 1.2); /* Horizontal padding - same as tab */
+  border-radius: var(--border-radius-base); /* Rounded corners */
+  background-color: #3a3a3a; /* Same background as inactive tabs */
+  color: var(--color-text-secondary); /* Same text color as inactive tabs */
+  cursor: pointer;
+  margin: 0 calc(var(--margin-base) / 2); /* Spacing - same as tabs */
+  height: 100%; /* Fill tab bar height */
+  transition: background-color var(--transition-duration) var(--transition-easing),
+              color var(--transition-duration) var(--transition-easing),
+              box-shadow var(--transition-duration) var(--transition-easing);
+  box-shadow: none; /* No default shadow */
+}
+
+#create_tab:hover,
+.create_tab:hover {
+  background-color: #4a4a4a; /* Lighter background on hover - same as tabs */
+  color: var(--color-text-primary); /* Primary text color on hover - same as tabs */
+  box-shadow: var(--box-shadow-normal); /* Add subtle shadow on hover */
+}
+
+
+/* -------------------------------------------------- */
+/* ✨ Frames Container - Area for Iframes/Tab Content ✨ */
+/* -------------------------------------------------- */
+#frames {
+  position: relative; /* Position iframes within this container */
+  width: 100%;
+  height: calc(100vh - var(--toolbar-height) - var(--margin-base)); /* Fill remaining viewport space below tabs */
+  margin-top: var(--margin-base); /* Spacing from tabs */
+}
+
+
+/* -------------------------------------------------- */
+/* ✨ Iframe -  Hidden by Default, Full Size ✨ */
+/* -------------------------------------------------- */
+iframe {
+  display: none; /* Hidden by default, shown when tab is active */
+  width: 100%;
+  height: 100%;
+  border: none; /* Remove iframe border */
+  position: absolute; /* Position iframes within #frames container */
+}
     </style>
 
     <!-- Google tag (gtag.js) -->
@@ -111,7 +197,8 @@
 
 <body>
     <div id="tabs">
-        <div class="create_tab" onclick="window.location.href='./main.html'"><span class="material-symbols-outlined">home</span></div>
+        <div class="create_tab" onclick="load_workspace()"><span class="material-symbols-outlined">upload_file</span></div>
+        <div id="tabs2"></div>
         <div id="create_tab" onclick="createTab('New Tab', './start.html')">+</div>
     </div>
 
@@ -126,6 +213,52 @@
             const results = regex.exec(window.location.search);
             return results ? decodeURIComponent(results[1].replace(/\+/g, ' ')) : '';
         }
+
+        function upload_workspace() {
+    return new Promise((resolve, reject) => {
+        // Create an input element dynamically
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.glitchworkspace'; // Restrict to .glitchworkspace files
+
+        // Listen for file selection
+        input.onchange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fileContents = e.target.result;
+                    resolve(fileContents); // Resolve the promise with the file contents
+                };
+                reader.onerror = function(err) {
+                    reject(err); // Reject the promise if there's an error
+                };
+                reader.readAsText(file); // Read the file as text
+            } else {
+                reject(new Error('No file selected'));
+            }
+        };
+
+        // Trigger the file input dialog
+        input.click();
+    });
+}
+
+function load_workspace(){
+upload_workspace().then((contents) => {
+    x = contents.replace(" ","");
+    x = x.split("\n")
+    for (line in x){ // how the hell does this work in js
+        if (x[line] != ""){
+        console.log("loading "+"launch_page.html?url="+x[line])
+        createTab("Workspace Tab", "launch_page.html?url="+x[line])
+    }
+    }
+}).catch((error) => {
+    console.error('Error:', error);
+});
+}
+
 
         function createTab(name, url) {
             var tab = document.createElement("div");
@@ -186,15 +319,42 @@
                 `;
                 var last_title = frameTitle;
                 setInterval(function () {
-                    frameTitle = frame.contentDocument.title;
-                    if (frameTitle != last_title) {
-                        tab.innerHTML = `
-                            <p>${frameTitle}</p>
-                            <p class="close" onclick="removeTab('${tab.id}')">X</p>
-                        `;
-                        last_title = frameTitle;
-                    }
-                }, 500);
+    frameTitle = frame.contentDocument.title;
+
+    frameURL = frameTitle.split("|G|")[1]
+    frameTitle = frameTitle.split("|G|")[0]
+    // Cap the title length
+    const maxTitleLength = 30;
+    if (frameTitle.length > maxTitleLength) {
+        frameTitle = frameTitle.substring(0, maxTitleLength) + '...';
+    }
+
+    if (frameTitle != last_title) {
+        if (frameURL == ""){
+            x = getURLParameter('url')
+            if (x.includes(".") == false){
+                x="https://duckduckgo.com/search?q=" + x
+            }
+            if (x.startsWith("https://") == false){
+                x="https://" + x
+            }
+            url1 = "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + x
+        }
+        else {
+            url1 = "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=" + frameURL 
+        }
+        tab.innerHTML = `
+    <p style="display: flex; align-items: center;">
+        <img style="width: 20px; border-radius: 15px; margin-right: 10px;" src="`+url1+`" &size=553">
+        ${frameTitle}
+    </p>
+    <p class="close" style="display: inline-block; cursor: pointer;" onclick="removeTab('${tab.id}')">X</p>
+`;
+
+        last_title = frameTitle;
+    }
+}, 500);
+
             };
         }
 
@@ -212,6 +372,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             if (initialized === 0) {
                 var url = getURLParameter("url");
+                
                 if (url.includes(".onion") && localStorage.getItem("premium") === "1" && localStorage.getItem("tor") === "1") {
                     url = url.replace(".onion", "").replace("http://", "");
                     var new_tor_url = "https://onion.torry.io/main.php?url=" + url;
@@ -220,9 +381,15 @@
                 if (url) {
                     createTab("Home", "./launch_page.html?url=" + url);
                 }
+                else {
+                    createTab("New Tab", "start.html")
+                }
                 initialized = 1;
             }
         });
+
+       
+
     </script>
     <script src="scripts/js/global.js"></script>
 </body>
